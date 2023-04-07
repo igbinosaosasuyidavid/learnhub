@@ -1,0 +1,29 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+  relationMode = "prisma"
+}
+
+model User{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  email String @unique
+  hash String 
+  admin Boolean @default(false)
+  fullName String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Audio{
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+  src String 
+  createdAt DateTime @default(now())
+}

@@ -2,7 +2,7 @@ import NextAuth, { Session } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import GoogleProvider from "next-auth/providers/google";
 import bcrypt from "bcryptjs";
-import prisma from "@/../prisma/db";
+import prisma from "../../../../prisma/db";
 
 export const authOptions = {
   // Configure one or more authentication providers

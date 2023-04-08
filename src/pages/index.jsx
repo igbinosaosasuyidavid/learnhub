@@ -5,22 +5,33 @@ import axios from 'axios';
 import Link from 'next/link'
 import { useEffect, useState } from 'react';
 import io from 'socket.io-client'
+import Chat from '@/components/chat';
 
-var socket=io()
+const socket = io()
 export default function Home() {
+  
   const { data: session } = useSession();
-  const [message, setMessage] = useState("");
-  const [allMessages,setAllMessages]=useState([])
-  useEffect(()=>{
-    SetupSocket();
-  },[])
+  const [in_room, setInRoom] = useState(false);
+  const [username, setUsername] = useState("");
+  // const [allMessages,setAllMessages]=useState([])
+  useEffect(() => {
+    fetch('/api/socket').finally(() => {
+ 
 
-  async function SetupSocket() {
-    await fetch("/api/socket");
-  }
+      socket.on('connect', () => {
+        alert("hi")
+      })
+
+      socket.on('disconnect', () => {
+        console.log('disconnect')
+      })
+    })
+  }, [])
+
   async function  handleSubmit (e) {
     e.preventDefault()
-    socket.emit("join_room",{username:"sasu",room:"room1"})
+    socket.emit("join_room",'room1')
+    setInRoom(true)
   
   }
 
@@ -36,34 +47,14 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="" >
-        <div className='max-w-2xl m-auto '>
-            <h2 className='bg-black text-white p-4 py-4 font-bold'>Chat Room</h2>
-            <div className='bg-slate-200 h-96 relative'>
-              {allMessages.map((data, index) => (
-                    <div className='message' key={index}>
-                        {
-                         
-                          <div className={`w-full flex ${data.type==="my"?"justify-end":""} ${data.type==="other"?"justify-start":""} ${data.type==="update"?"justify-center":''}`}>
-                            <div className={`${data.type!=="update" && 'bg-white'} inline-block w-1/2 p-4 mt-5 mr-6 rounded-xl`}><p className='text-sm text-slate-300'>{data.type==="my"?"You":data.name}</p><p className='text-lg text-black'>{data.message}</p></div>
-                          </div>
-                        }
-                    </div>
-                  ))}
 
-
-              <form action="" className='flex w-full absolute bottom-0' onSubmit={handleSubmit}>
-                <input type="text" className='w-4/5 bg-slate-200 p-3 border border-gray-400' placeholder='New message' value={message} onChange={(e)=>{setMessage(e.target.value)}}/>
-                <button type='submit' className='bg-green-700 w-1/5 text-white'>Send</button>
-              </form>
-            </div>
-           
-
-        </div>
-
-      
         {session?.user ? (
           <>
-             
+               {!in_room && <button onClick={handleSubmit} className='bg-amber-600 py-4 px-7 rounded-xl'>Open chat</button>}
+               { in_room &&
+                <Chat socket={socket} username={session?.user.name} room={"room1"}/>
+               }
+      
 
           <div className="flex mx-auto gap-2 w-fit">
 
@@ -82,7 +73,7 @@ export default function Home() {
             href="/auth/login"
             className="rounded-3xl mt-4 text-center p-2 bg-green-600  text-white block mx-auto w-fit px-4"
           >
-            Signin
+            Signin to join the conference
           </Link>
         )}
       </main>

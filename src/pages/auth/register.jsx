@@ -1,31 +1,47 @@
+import LoaderContext from "@/contexts/loader";
+import ToastContext from "@/contexts/toast";
 import axios from "axios";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React from "react";
+import React, { useContext } from "react";
+import { FaEnvelope, FaLock, FaUser } from "react-icons/fa";
 
 function Register() {
   const router = useRouter();
   const { data: session } = useSession();
+  const {setShowLoader}=useContext(LoaderContext)
+  const {setToast}=useContext(ToastContext)
   const registerUser = async (event) => {
     event.preventDefault();
     // use custom register endpoint
+
+    
     try {
-      const form = event.target;
+      const form = event.target
+      if (form.password.value!==form.cpassword.value) {
+
+        setToast("Password do not match","error")
+        return null
+      }
+          setShowLoader(true)
       const res = await axios.post("/api/auth/custom_register", {
         password: form.password.value,
         email: form.email.value,
         fullName: form.fname.value + " " + form.lname.value,
       });
       if (res.data.success) {
-        alert("Signup successful");
+        setShowLoader(false)
+        setToast("Sign up successful","success")
         router.push("/auth/login");
+      }else{
+        setShowLoader(false)
+        setToast(res.data.message,"error")
       }
     } catch (err) {
       console.log(err);
       if (err.response) {
-        alert(err.response);
-        console.log(err,err.response);
+        setToast(err.response.message,"error")
       }
     }
   };
@@ -33,77 +49,139 @@ function Register() {
     router.push("/");
   }
   return (
-    <div className="md:grid grid-cols-[1fr] h-screen">
+    // <div className="md:grid grid-cols-[1fr] h-screen">
    
-      <div className="flex justify-center pt-10">
-        <div className="max-w-[400px] w-full p-5 mx-auto pt-2">
-          <form onSubmit={registerUser}>
-            <div>
-              <h2 className="text-xl font-semibold text-center">Join Us Now</h2>
-              <p className="text-gray-600 text-lg mt-3">
-               Sign up
-              </p>
-            </div>
+    //   <div className="flex justify-center pt-10">
+    //     <div className="max-w-[400px] w-full p-5 mx-auto pt-2">
+    //       <form onSubmit={registerUser}>
+    //         <div>
+    //           <h2 className="text-xl font-semibold text-center">Join Us Now</h2>
+    //           <p className="text-gray-600 text-lg mt-3">
+    //            Sign up
+    //           </p>
+    //         </div>
 
-            <div className="grid gap-3 py-5">
-              <input
-                type="text"
-                name="fname"
-                id="fname"
-                placeholder="First Name"
-                className="p-4 px-6 rounded-lg  bg-slate-100"
-              />
-              <input
-                type="text"
-                name="lname"
-                id="lname"
-                placeholder="Last Name"
-                className="p-4 px-6 rounded-lg  bg-slate-100"
+    //         <div className="grid gap-3 py-5">
+    //           <input
+    //             type="text"
+    //             name="fname"
+    //             id="fname"
+    //             placeholder="First Name"
+    //             className="p-4 px-6 rounded-lg  bg-slate-100"
+    //           />
+    //           <input
+    //             type="text"
+    //             name="lname"
+    //             id="lname"
+    //             placeholder="Last Name"
+    //             className="p-4 px-6 rounded-lg  bg-slate-100"
                 
-              />
-              <input
-                type="email"
-                name="email"
-                id="email"
-                placeholder="Email Address"
-                className="p-4 px-6 rounded-lg  bg-slate-100"
-                required
-              />
-              <input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="Choose Password"
-                className="p-4 px-6 rounded-lg  bg-slate-100"
-                required
-              />
-              <input
-                type="password"
-                name="cpassword"
-                id="cpassword"
-                placeholder="Repeat Password"
-                className="p-4 px-6 rounded-lg  bg-slate-100"
-                required
-              />
-              <button
-                type="submit"
-                className="m-auto  shadow-lg bg-red-900 inline-block w-60 text-white p-2 rounded-3xl"
-              >
-                Create Account
-              </button>
-            </div>
+    //           />
+    //           <input
+    //             type="email"
+    //             name="email"
+    //             id="email"
+    //             placeholder="Email Address"
+    //             className="p-4 px-6 rounded-lg  bg-slate-100"
+    //             required
+    //           />
+    //           <input
+    //             type="password"
+    //             name="password"
+    //             id="password"
+    //             placeholder="Choose Password"
+    //             className="p-4 px-6 rounded-lg  bg-slate-100"
+    //             required
+    //           />
+    //           <input
+    //             type="password"
+    //             name="cpassword"
+    //             id="cpassword"
+    //             placeholder="Repeat Password"
+    //             className="p-4 px-6 rounded-lg  bg-slate-100"
+    //             required
+    //           />
+    //           <button
+    //             type="submit"
+    //             className="m-auto  shadow-lg bg-red-900 inline-block w-60 text-white p-2 rounded-3xl"
+    //           >
+    //             Create Account
+    //           </button>
+    //         </div>
          
-          </form>
+    //       </form>
 
          
-          <p className="text-center">
-            Already have an account?{" "}
-            <Link href={"/auth/login"} className="font-semibold">
-              Log in
-            </Link>
-          </p>
+    //       <p className="text-center">
+    //         Already have an account?{" "}
+    //         <Link href={"/auth/login"} className="font-semibold">
+    //           Log in
+    //         </Link>
+    //       </p>
+    //     </div>
+    //   </div>
+    // </div>
+      <div className="bg-[url('/login4.png')] min-h-screen bg-fixed  bg-cover bg-center bg-no-repeat overlay">
+      <div className="h-fit m-auto max-w-screen-lg ">
+        <div className="flex m-auto items-center justify-center h-full w-[370px]">
+          <div className="text-center w-full">
+            <img src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8' width={80} height={80}/>
+            
+            <h1 className="text-left text-white text-2xl mb-3  mt-7">Start your journey now</h1>
+            <form onSubmit={registerUser}>
+              <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
+                <FaUser color={'white'} className="w-1/6"/>
+                <input type="text" name="fname" placeholder="First Name" id="fname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+              </div>
+              <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
+                <FaUser color={'white'} className="w-1/6"/>
+                <input type="text" name="lname" placeholder="Last Name" id="lname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+              </div>
+              <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
+                <FaEnvelope color={'white'} className="w-1/6"/>
+                <input type="email" name="email" placeholder="Email Address" id="email" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+              </div>
+              <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
+                <FaLock color={'white'} className="w-1/6"/>
+                <input type="password" name="password" placeholder="Password" id="password" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+              </div>
+           
+              <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
+                <FaLock color={'white'} className="w-1/6"/>
+                <input type="password" name="cpassword" placeholder="Confirm Password" id="cpassword" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+              </div>
+              <div className="flex mb-5 mt-3">
+                  <button type="submit" className="w-full bg-secondary text-white rounded-[50px] py-4 p-4 tracking-[0.4rem] font-semibold hover:opacity-90 duration-300">REGISTER</button>
+              </div>
+              <div className="flex items-center">
+                <div>
+                  <input type="checkbox" name="remember" id="remember" className="inline-block rounded-3xl" />
+                  <span className="text-gray-300 ml-2 inline-block text-sm">Remember Me</span>
+                </div>
+            
+              </div>
+              <div className="flex">
+                <a href="/auth/login" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer" onClick={(e)=>{e.preventDefault();router.push('/auth/login')}}>LOGIN</a>
+  
+              </div>
+              
+            </form>
+          </div>
+  
+        </div>
+        <div className="flex m-auto items-center justify-center bg-transparent mt-14">
+          <div className="w-1/2">
+            <div>
+              <a href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300">Privacy Policy</a>
+              <a href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300" >Terms and Conditions</a>
+            </div>
+          </div>
+          <div className="w-1/2 text-right">
+            <span className="ml-auto text-gray-300 text-sm">&copy; Copyright The Valley. All right reserved</span>
+          </div>
         </div>
       </div>
+  
     </div>
   );
 }

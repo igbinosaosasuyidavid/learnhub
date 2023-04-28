@@ -1,0 +1,62 @@
+.loader-ind {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    position: relative;
+    animation: rotate 1s linear infinite
+  }
+  .loader-ind::before , .loader-ind::after {
+    content: "";
+    box-sizing: border-box;
+    position: absolute;
+    inset: 0px;
+    border-radius: 50%;
+    border: 2px solid #FFF;
+    animation: prixClipFix 2s linear infinite ;
+  }
+  .loader-ind::after{
+    border-color: #6255a4;
+    animation: prixClipFix 2s linear infinite , rotate 0.5s linear infinite reverse;
+    inset: 2px;
+  }
+
+  @keyframes rotate {
+    0%   {transform: rotate(0deg)}
+    100%   {transform: rotate(360deg)}
+  }
+
+  @keyframes prixClipFix {
+      0%   {clip-path:polygon(50% 50%,0 0,0 0,0 0,0 0,0 0)}
+      25%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 0,100% 0,100% 0)}
+      50%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,100% 100%,100% 100%)}
+      75%  {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 100%)}
+      100% {clip-path:polygon(50% 50%,0 0,100% 0,100% 100%,0 100%,0 0)}
+  }
+
+  .loader-vid {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: block;
+
+    position: relative;
+    background: #a8a8a8;
+    box-shadow: -24px 0 #a8a8a8, 24px 0 #a8a8a8;
+    box-sizing: border-box;
+    animation: shadowPulse 2s linear infinite;
+  }
+  
+  @keyframes shadowPulse {
+    33% {
+      background: #e7e7e7;
+      box-shadow: -24px 0 #6255a4, 24px 0 #e7e7e7;
+    }
+    66% {
+      background: #6255a4;
+      box-shadow: -24px 0 #e7e7e7, 24px 0 #e7e7e7;
+    }
+    100% {
+      background: #e7e7e7;
+      box-shadow: -24px 0 #e7e7e7, 24px 0 #6255a4;
+    }
+  }

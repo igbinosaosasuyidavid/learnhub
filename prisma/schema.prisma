@@ -3,27 +3,82 @@
 
 generator client {
   provider = "prisma-client-js"
-  
 }
 
 datasource db {
-  provider = "mongodb"
-  url      = env("DATABASE_URL")
+  provider     = "mongodb"
+  url          = env("DATABASE_URL")
   relationMode = "prisma"
 }
 
-model User{
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  email String @unique
-  hash String 
-  admin Boolean @default(false)
-  fullName String
+model User {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  email           String   @unique
+  hash            String
+  admin           Boolean  @default(false)
+  fullName        String
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+  bio             String?
+  pic             String?
+  enrolledCourses Course[] @relation("enrolledCourses", fields: [courseIds], references: [id])
+  courseIds       String[] @db.ObjectId
+  createdCourses  Course[]
+  orders          Order[]
+  role            Role     @default(STUDENT)
+}
+
+enum Role {
+  STUDENT
+  ADMIN
+  TUTOR
+}
+
+model Order {
+  id              String   @id @default(auto()) @map("_id") @db.ObjectId
+  user            User?    @relation(fields: [userId], references: [id])
+  userId          String   @db.ObjectId
+  stripeSessionId String
+  status          String   @default("success")
+  total           Float
+  items           Course[] @relation(fields: [itemsIds], references: [id])
+  itemsIds        String[] @db.ObjectId
+}
+
+model Course {
+  id            String     @id @default(auto()) @map("_id") @db.ObjectId
+  title         String
+  description   String
+  featuredImage String
+  price         Float
+  author        User       @relation(fields: [authorId], references: [id])
+  authorId      String     @db.ObjectId
+  orders        Order[]    @relation(fields: [orderIds], references: [id])
+  orderIds      String[]   @db.ObjectId
+  categories    Category[] @relation(fields: [categoryIds], references: [id])
+  categoryIds   String[]   @db.ObjectId
+  lessons       Lesson[]
+  createdAt     DateTime   @default(now())
+  updatedAt     DateTime   @updatedAt
+  students      User[]     @relation("enrolledCourses", fields: [studentIds], references: [id])
+  studentIds    String[]   @db.ObjectId
+}
+
+model Lesson {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  title String 
+  video_url String
+  duration String
+  materials String[]
+  course    Course   @relation(fields: [courseId], references: [id])
+  courseId  String   @db.ObjectId
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-model Audio{
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-  src String 
-  createdAt DateTime @default(now())
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String
+  courses   Course[] @relation(fields: [courseIds], references: [id])
+  courseIds String[] @db.ObjectId
 }

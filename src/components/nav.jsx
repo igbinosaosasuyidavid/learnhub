@@ -5,6 +5,7 @@ import { useSession } from "next-auth/react";
 import MenuCart from "./menucart";
 import UserProfile from "./userprofile";
 import { useRouter } from "next/router";
+import Image from "next/image";
 
 export default function Nav() {
   const { data: session } = useSession();
@@ -16,7 +17,7 @@ export default function Nav() {
         <div className="custom-container">
           <div className="flex items-center">
             <div className="flex gap-3 items-center cursor-pointer w-2/6" onClick={(e)=>{e.preventDefault();router.push("/")}}>
-                <img src="/logo.svg" alt="logo" className="w-10 h-10"/>
+                <Image src="/logo.svg" alt="logo" className="w-10 h-10" width={200} height={200}/>
                 <h2 className="font-semibold text-lg">The Valley</h2>
             </div>
             <ul className="list-none flex justify-center gap-6 text-center nav-links w-3/6">

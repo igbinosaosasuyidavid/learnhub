@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useRouter } from 'next/router';
 import CartContext from '@/contexts/cart';
 import ToastContext from '@/contexts/toast';
+import Image from 'next/image';
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 
@@ -50,14 +51,14 @@ export default function ConfirmOrder() {
     <>
         {
             failed?
-            <div>
-                <h1>Sorry we coudn't receive your payment please try checking out again</h1>
+            <div className='flex h-screen w-full justify-center items-center'>
+                <h1 className='text-center'>Sorry we coudn&apos;t receive your payment please try checking out again</h1>
             </div>
             :
             <div className="flex justify-center items-center fixed h-full w-full bg-white  z-[200] text-center">
                 <div>
                     <div className='text-center mb-[100px]'>
-                        <img src="/logo.svg" alt="" className='text-center !inline' width={100} height={100}/>
+                        <Image src="/logo.svg" alt="" className='text-center !inline' width={100} height={100}/>
                     </div>
                     <span className="loader w-full"></span>
                     <div className='text-md font-semibold mt-3 w-full'>Please wait we are verifying your payment...</div>

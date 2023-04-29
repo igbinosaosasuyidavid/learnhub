@@ -7,16 +7,18 @@ async function handler(req, res) {
       await prisma.$connect()
       const { email, password, fullName } = req.body;
       let users=await prisma.user.findMany()
-      console.log(users);
+   
       // check if user exists
       let user = await prisma.user.findUnique({
         where: { email },
       });
 
-      if (user)
+      if (user){
+     
         return res
           .status(400)
           .json({ success: false, message: "User already exist" });
+      }
 
       // create new user
       const salt = bcrypt.genSaltSync(10);

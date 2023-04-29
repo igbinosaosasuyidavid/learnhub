@@ -1,6 +1,7 @@
 import prisma from "../../../../../prisma/db";
 
 export default async function handler(req, res) {
+  console.log(global.prisma);
   if (req.method?.toUpperCase() === "GET") {
     try {
    

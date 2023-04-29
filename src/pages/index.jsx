@@ -11,6 +11,7 @@ import axios from "axios"
 import ToastContext from "@/contexts/toast"
 import { useRouter } from "next/router"
 import Footer from "@/components/footer"
+import LoaderContext from "@/contexts/loader"
 
 export default function Home() {
   const router=useRouter()
@@ -18,7 +19,10 @@ export default function Home() {
   const {addToCart}=useContext(CartContext)
   const {setToast}=useContext(ToastContext)
   const [courses,setCourses]=useState([])
-  const [loader,setLoader]=useState(false)
+
+  const [loadCourse,setLoadCourse]=useState(true)
+  const {setShowLoader}=useContext(LoaderContext)
+
   const categories=['all categories','web design','ui/ux','coding',"data science",'writing','marketing']
   useEffect(()=>{
     getCourses()
@@ -29,7 +33,9 @@ export default function Home() {
     try {
       const res=await axios.get("/api/app/courses/get-courses")
       if (res.data) {
+        setLoadCourse(false)
         setCourses(res.data)
+        
       }
     } catch (e) {
       console.log(e);
@@ -70,18 +76,26 @@ export default function Home() {
             
 
           </div>
+          {
+              loadCourse &&
+              <div className="flex justify-center items-center my-5 mb-9">
+
+              <span className="loader-course"></span>
+              </div>
+            }
           <div className="grid grid-cols-4 gap-5">
-         
+           
             {
-              courses.map((data)=>{
+              courses.slice(0,8).map((data)=>{
                 return (
                   <div onClick={()=>{
+                    setShowLoader(true)
                       router.push(
                         { pathname: `/courses/${data.id}`},
                         "/courses/"+data.id
                       );
                   }} className="shadow-lg border border-solid border-gray-500 cursor-pointer" key={data.id}>
-                      <img src={data.featuredImage} alt="course-img" className="w-full object-cover h-[150px]" />
+                      <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover h-[150px]" width={200} height={200}/>
                       <div className="p-3">
                         <h3 className="text-black text-sm font-semibold">{data.title.length>50?data.title.slice(0,50)+'...':data.title}</h3>
                         <p className="flex items-center text-xs gap-1 mb-3 mt-1"><FaUserTie className="text-secondary "/>{data.author.fullName}</p>

@@ -15,6 +15,7 @@ import {
 import { signOut } from 'next-auth/react'
 import { BsBookmarkStar,BsBook } from 'react-icons/bs'
 import { useRouter } from 'next/router'
+import Image from 'next/image'
 
 export default  function UserProfile(props) {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -25,7 +26,7 @@ export default  function UserProfile(props) {
       <>
         <a className='cursor-pointer' ref={btnRef}  onClick={onOpen}>
             {
-               props.session?.user?.profile?.img ? <img src={props.session?.user?.profile?.img} alt="profile-pic" /> : <div className="flex justify-center items-center w-12 h-12 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase text-xl">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
+               props.session?.user?.profile?.Image ? <Image src={props.session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center w-12 h-12 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase text-xl">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
             }
         </a>
     
@@ -43,7 +44,7 @@ export default  function UserProfile(props) {
                 
                 <div className=''>
                     {
-                    props.session?.user?.profile?.img ? <img src={props.session?.user?.profile?.img} alt="profile-pic" /> : <div className="flex justify-center items-center w-16 h-16 rounded-full  bg-[rgb(225,225,225,0.4)] text-white font-semibold uppercase text-3xl ">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
+                    props.session?.user?.profile?.Image ? <Image src={props.session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center w-16 h-16 rounded-full  bg-[rgb(225,225,225,0.4)] text-white font-semibold uppercase text-3xl ">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
                     }
                     <div>
                         <p className='text-md capitalize text-white'>{props.session?.user.name}</p>

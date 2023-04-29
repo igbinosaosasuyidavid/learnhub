@@ -1,6 +1,7 @@
 import LoaderContext from "@/contexts/loader";
 import ToastContext from "@/contexts/toast";
 import { signIn, useSession } from "next-auth/react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import React, { useContext } from "react";
@@ -48,7 +49,7 @@ function Login() {
       <div className="h-fit m-auto max-w-screen-lg ">
         <div className="flex m-auto items-center justify-center h-full w-[370px]">
           <div className="text-center w-full">
-            <img src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8' width={80} height={80}/>
+            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 h-32 w-32' width={200} height={200}/>
             
             <h1 className="text-left text-white text-2xl mb-3  mt-7">Welcome back!</h1>
             <form onSubmit={loginUser}>
@@ -69,12 +70,12 @@ function Login() {
                   <span className="text-gray-300 ml-2 inline-block text-sm">Remember Me</span>
                 </div>
                 <div className="ml-auto">
-                  <a href="/auth/forgot-password" className="text-gray-300 text-sm hover:text-white duration-300">Forgot password?</a>
+                  <Link href="/auth/forgot-password" className="text-gray-300 text-sm hover:text-white duration-300">Forgot password?</Link>
                 </div>
                
               </div>
               <div className="flex">
-                <a href="/auth/register" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer"  onClick={(e)=>{ e.preventDefault(); router.push('/auth/register')}}>CREATE ACCOUNT</a>
+                <Link href="/auth/register" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer"  onClick={(e)=>{ e.preventDefault(); router.push('/auth/register')}}>CREATE ACCOUNT</Link>
 
               </div>
              
@@ -82,11 +83,11 @@ function Login() {
           </div>
 
         </div>
-        <div className="flex m-auto items-center justify-center bg-transparent mt-14">
+        <div className="flex m-auto items-center justify-center bg-transparent mt-7">
           <div className="w-1/2">
             <div>
-              <a href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300">Privacy Policy</a>
-              <a href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300" >Terms and Conditions</a>
+              <Link href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300">Privacy Policy</Link>
+              <Link href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300" >Terms and Conditions</Link>
             </div>
           </div>
           <div className="w-1/2 text-right">

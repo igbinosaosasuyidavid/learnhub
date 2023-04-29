@@ -17,6 +17,7 @@ import { MdAdd} from "react-icons/md";
 import { BsArrowBarLeft } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import { FaTimes } from "react-icons/fa";
+import Image from "next/image";
 
 
 
@@ -215,7 +216,7 @@ function Course({courses}) {
             const reader = new FileReader()
             reader.onload = () => {
               const parent = document.querySelector('.preview-box3')
-              parent.innerHTML = `<img class="h-[150px] w-full object-cover rounded-lg" src=${reader.result} />`
+              parent.innerHTML = `<Image class="h-[150px] w-full object-cover rounded-lg" src=${reader.result} />`
             }
       
             reader.readAsDataURL(file)
@@ -225,7 +226,7 @@ function Course({courses}) {
             const reader = new FileReader()
             reader.onload = () => {
               const parent = document.querySelector('.preview-box')
-              parent.innerHTML = `<img class="w-full object-cover rounded-lg" src=${reader.result} />`
+              parent.innerHTML = `<Image class="w-full object-cover rounded-lg" src=${reader.result} />`
             }
             reader.readAsDataURL(file)
       
@@ -283,15 +284,16 @@ function Course({courses}) {
                             <button className="ml-auto bg-secondary text-white p-2 rounded-lg inline-flex gap-1 items-center duration-300 hover:opacity-90" onClick={(e)=>{e.preventDefault();setCreateModal(true)}}><MdAdd size={25}/> Create New Course</button>
                         </div>
                     
-                    <div className="grid grid-cols-4 gap-5">
+             
                         {
                             courses.length!==0?
                             <>
+                            <div className="grid grid-cols-4 gap-5">
                             {
                                 courses.map((data)=>{
                                     return (
                                     <div  className="shadow-lg border border-solid border-gray-500" key={data.id}>
-                                        <img src={data.featuredImage} alt="course-img" className="w-full object-cover h-[150px]" />
+                                        <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover h-[150px]" width={200} height={200} />
                                         <div className="p-3">
                                             <h3 className="text-black text-sm font-semibold">{data.title.length>50?data.title.slice(0,50)+'...':data.title}</h3>
                                         
@@ -311,12 +313,14 @@ function Course({courses}) {
                                     )
                                 })
                                 }
-                            </>:
-                            <p>You don't have any course yet</p>
+                            </div>
+                            </>
+                            :
+                            <p className="text-center my-7 w-full">You don&apos;t have any course yet</p>
 
                         }
                     
-                    </div>
+                
                     </div>
                 </div>
             }
@@ -346,9 +350,8 @@ function Course({courses}) {
 
                                             </div>
                                             <div className="mb-3">
-                                                <label htmlFor="description" className="text-sm">Price</label>
+                                                <label htmlFor="description" className="text-sm" >Price</label>
                                                 <input type="number" name="price" className="bg-slate-100 w-full p-2 px-3 rounded-lg text-sm" placeholder="Course Price" defaultValue={currentCourse.price} id="ptitle" step=".01"/>
-
                                             </div>
                                         </div>
                                         <div className="w-2/5">
@@ -360,7 +363,7 @@ function Course({courses}) {
                                                 <input type="file"
                                                 name="image" hidden onChange={(e)=>{handleImage(e,false)}} id="image" placeholder="Price in $(USD)" className="p-4 px-6 rounded-lg bg-slate-100"/>
                                                 <div className="preview-box mt-9">
-                                                    <img src={currentCourse.featuredImage} alt="" className="rounded-lg"/>
+                                                    <Image src={currentCourse.featuredImage} alt="course-img" className="rounded-lg" width={200} height={200}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -387,7 +390,7 @@ function Course({courses}) {
                                         currentCourse.lessons.length!==0? <>
                                         {
                                                 currentCourse.lessons.map((data,i)=>
-                                                <div className="flex gap-2 border-b border-t py-2 border-gray-100">
+                                                <div className="flex gap-2 border-b border-t py-2 border-gray-100" key={data.id}>
                                                     <p>{i+1})</p>
                                                     <h1>{data.title?.length>30? data.title.slice(0,30)+'...':data.title}</h1>
                                                     <p className="ml-auto text-sm font-bold">{data.duration}</p>

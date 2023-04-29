@@ -14,6 +14,7 @@ import LoaderContext from '@/contexts/loader';
 import { loadStripe } from '@stripe/stripe-js';
 import { useSession } from 'next-auth/react';
 import ToastContext from '@/contexts/toast';
+import Image from 'next/image';
 const stripePromise = loadStripe(
   process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
   );
@@ -72,7 +73,7 @@ export default function MenuCart() {
                           return(
                             <div className='border-b border-gray-300 p-2 py-4 cursor-pointer ' key={data.id} >
                               <div className='flex items-center gap-3'>
-                                <img src={data.featuredImage} alt="" className='w-16 h-16 object-cover rounded-md'/>
+                                <Image src={data.featuredImage} alt="" className='w-16 h-16 object-cover rounded-md' width={200} height={200}/>
                                 <div>
                                   <p className='text-sm text-left'>{data.title.length>40?data.title.slice(0,40)+'...':data.title}</p>
                                   <h3 className='text-black text-left text-[14px] font-semibold mt-1.5 flex items-center'><span>{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(data.price).toFixed(3))}</span><span className='text-xs text-red-400 cursor-pointer ml-auto' onClick={()=>removeCart(data.id)}><FaTimes/></span></h3>

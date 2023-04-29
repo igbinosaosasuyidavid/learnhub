@@ -10,7 +10,7 @@ import * as tus from 'tus-js-client'
 
 
 import CartContext from "@/contexts/cart";
-
+import prisma from "../../../../prisma/db"
 import { FiEdit, FiFilePlus } from "react-icons/fi";
 
 import { MdAdd} from "react-icons/md";
@@ -18,15 +18,27 @@ import { BsArrowBarLeft } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
-import prisma from '../../../../prisma/db'
+
 
 
 export const getServerSideProps=async (context)=>{
 
-    const resp=await axios.get(`http://localhost:3000/api/app/user/get-courses?id=${context.params.user_id}`)
-  
+    const result=await prisma.user.findFirst({
+        where:{
+            id:context.params.id
+        },
+        select:{
+            createdCourses:{
+              include:{
+                author:true,
+                lessons:true
+              }
+            }
+        }
+    })
+    console.log(result);
     return {
-        props: {courses:resp.data.createdCourses},
+        props: {courses:result.createdCourses.length!==0?JSON.parse(JSON.stringify(result?.createCourses)):[]},
     }
 }
 
@@ -45,6 +57,9 @@ function Course({courses}) {
     const {setToast}=useContext(ToastContext)
     const router=useRouter()
     const { data: session } = useSession();
+    useEffect(()=>{
+        setShowLoader(false)
+    })
     const handleChange = (e) => {
 
         const file = e.target.files[0]

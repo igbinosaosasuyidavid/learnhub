@@ -5,7 +5,6 @@ import axios from "axios";
 import Nav from "@/components/nav";
 import LoaderContext from "@/contexts/loader";
 import ToastContext from "@/contexts/toast";
-import prisma from '../../../prisma/db'
 import { FaTimes, FaUserFriends } from "react-icons/fa";
 import { MdOndemandVideo } from "react-icons/md";
 import CartContext from "@/contexts/cart";
@@ -13,6 +12,7 @@ import { useSession } from "next-auth/react";
 import { BsStar } from "react-icons/bs";
 import { loadStripe } from '@stripe/stripe-js';
 import { authOptions } from "../api/auth/[...nextauth]";
+import prisma from "../../../prisma/db"
 import { getServerSession } from "next-auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
@@ -24,16 +24,34 @@ const stripePromise = loadStripe(
 
 export const getServerSideProps=async ({ req, res ,params})=>{
     const session= await getServerSession(req, res, authOptions)
-    console.log(session,'----');
-    const resp=await axios.get(`http://localhost:3000/api/app/courses/get-course?id=${params.course_id}`)
-    const resp2=await axios.get(`http://localhost:3000/api/app/user/user-student?user_id=${session?.id}&course_id=${params.course_id}`)
-    
 
+    const result=await prisma.course.findFirst({
+        where:{
+            id:params.course_id
+        },
+        include:{
+            author:true,
+            lessons:true
+        }
+    })
     
-   
+    const courses = await prisma.course.findFirst({
+        where: {
+            AND: {
+                id:params.course_id,
+                studentIds:{
+                    hasEvery:[session.id]
+                }
+            },
+        },
+     
+    
+      })
+    
+      console.log(result,courses);
   
     return {
-        props: {course:resp.data,userIsStudent:resp2.data.userIsStudent},
+        props: {course: JSON.parse(JSON.stringify(result)),userIsStudent:courses? courses.length!==0?true:false:false}
     }
 }
 
@@ -78,7 +96,7 @@ function Course({course,userIsStudent}) {
         <div className="bg-[rgb(128,128,128,0.04)] py-6">
             <div className="custom-container">
                 <div className="flex items-center gap-6">
-                    <Image src={course.featuredImage} alt="course-Image"  className="h-72 w-1/2 object-cover rounded-xl" width={200} height={200}/>
+                    <Image src={course.featuredImage} alt="course-Image"  className="h-72 w-1/2 object-cover rounded-xl" width={500} height={500}/>
                     <div className="w-1/2">
                     <h2 className="text-black font-semibold text-2xl mb-2">{course.title}</h2>
                     <h2>{course.description?.length>200 ? course.description?.slice(0,200)+'...':course.description}</h2>

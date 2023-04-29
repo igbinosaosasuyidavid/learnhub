@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import {RiUserSettingsLine} from "react-icons/ri"
 import {CiLogout} from "react-icons/ci"
 
@@ -16,11 +16,13 @@ import { signOut } from 'next-auth/react'
 import { BsBookmarkStar,BsBook } from 'react-icons/bs'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
+import LoaderContext from '@/contexts/loader'
 
 export default  function UserProfile(props) {
     const { isOpen, onOpen, onClose } = useDisclosure()
     const btnRef = React.useRef()
     const  router=useRouter()
+    const {setShowLoader}=useContext(LoaderContext)
   
     return (
       <>
@@ -62,7 +64,7 @@ export default  function UserProfile(props) {
                         <RiUserSettingsLine size={20} className='text-gray-700'/>
                         <h2 className='text-black font-semibold text-[14px]'>Edit profile</h2>
                     </div>
-                    <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={(e)=>{e.preventDefault();router.push(`/user/courses/${props.session?.id}`)}}>
+                    <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={(e)=>{setShowLoader(true);e.preventDefault();router.push(`/user/courses/${props.session?.id}`)}}>
                         <BsBookmarkStar size={20} className='text-gray-700'/>
                         <h2 className='text-black font-semibold text-[14px]'>My Courses</h2>
                     </div>

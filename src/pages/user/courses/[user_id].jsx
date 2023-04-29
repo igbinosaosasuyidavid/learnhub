@@ -10,7 +10,7 @@ import * as tus from 'tus-js-client'
 
 
 import CartContext from "@/contexts/cart";
-import prisma from "../../../prisma/db"
+import prisma from "../../../../prisma/db"
 import { FiEdit, FiFilePlus } from "react-icons/fi";
 
 import { MdAdd} from "react-icons/md";

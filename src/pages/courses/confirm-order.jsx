@@ -17,7 +17,7 @@ export default function ConfirmOrder() {
         console.log(cart,'------------');
         checkOrder()
        
-      }, [cart,checkOrder]);
+      }, [cart]);
     async function checkOrder() {
         const query = new URLSearchParams(window.location.search);
         if (query.get('payment')==="true") {

@@ -5,7 +5,7 @@ import axios from "axios";
 import Nav from "@/components/nav";
 import LoaderContext from "@/contexts/loader";
 import ToastContext from "@/contexts/toast";
-
+import prisma from '../../../prisma/db'
 import { FaTimes, FaUserFriends } from "react-icons/fa";
 import { MdOndemandVideo } from "react-icons/md";
 import CartContext from "@/contexts/cart";

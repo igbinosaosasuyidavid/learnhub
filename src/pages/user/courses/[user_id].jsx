@@ -18,7 +18,7 @@ import { BsArrowBarLeft } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
-
+import prisma from '../../../../prisma/db'
 
 
 export const getServerSideProps=async (context)=>{

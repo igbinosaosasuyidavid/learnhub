@@ -13,7 +13,7 @@ export default function Toast() {
         }
         
         
-    },[showToast])
+    },[showToast,setShowToast])
     return (
     <Button
         id='toaster'

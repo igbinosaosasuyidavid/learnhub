@@ -40,7 +40,7 @@ export const getServerSideProps=async ({ req, res ,params})=>{
             AND: {
                 id:params.course_id,
                 studentIds:{
-                    hasEvery:[session.id]
+                    hasEvery:[session?.id]
                 }
             },
         },
@@ -126,10 +126,10 @@ function Course({course,userIsStudent}) {
                                 {
                                     course.lessons.map(data=>    
                                     <div key={data.id} className="flex items-center p-4 px-5 rounded-md bg-[rgb(128,128,128,0.05)] hover:bg-[rgb(128,128,128,0.1)] duration-300 border border-solid border-gray-400 cursor-pointer mb-1" onClick={(e)=>{if (!userIsStudent) {
-                                        if (session.user) {
+                                        if (session?.user) {
                                             setToast("Please purchase this course to be enrolled",'info')
                                         }else{
-                                            router.push("/auth/register")
+                                            router.push("/auth/login")
                                         }
                                         
                                     }else{
@@ -150,7 +150,7 @@ function Course({course,userIsStudent}) {
                     <div className="md:w-2/6">
                         {
                             userIsStudent? <div className="mt-4">
-                                    <p className="md:text-2xl xs:text-sm">Howdy, {session.user?.name}</p>
+                                    <p className="md:text-2xl xs:text-sm">Howdy, {session?.user?.name}</p>
 
                                     <div className=" mt-5">
                                         <div className="w-full p-1 bg-slate-100 rounded-3xl">

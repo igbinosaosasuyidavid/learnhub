@@ -3,7 +3,7 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
  
-    domains: ['127.0.0.1','localhost'],
+    domains: ['127.0.0.1','localhost','thevalley-livid.vercel.app'],
     
   
   },

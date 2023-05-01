@@ -34,20 +34,23 @@ export default function Nav() {
            
            
             <div className="ml-auto flex items-center gap-3 md:w-2/6 xs:w-1/2 justify-end">
-              
+                <MenuCart/>
                 { !session?.user ?
                   <>
                    
-                    <Link href='/auth/login' className="font-semibold hover:text-gray-500 md:text-sm xs:text-[10px] ml-2 xs:text-gray-500">Sign in</Link>
+                    <Link href='/auth/login' className="font-semibold hover:text-gray-500 md:text-sm xs:text-[10px] ml-2 xs:text-gray-500 xs:border xs:border-black xs:rounded-3xl md:border-0 xs:py-0.5 xs:px-2 md:p-0">Sign in</Link>
+
                   
-                    <Link href='/auth/register' className="border border-black rounded-3xl md:text-sm xs:text-[10px] md:py-2.5 md:px-8 xs:py-1.5 xs:px-3 font-semibold duration-300 hover:bg-black hover:text-white xs:text-gray-500">Get Started</Link>
+                    <Link href='/auth/register' className="border border-black rounded-3xl md:text-sm xs:text-[10px] md:py-2.5 md:px-8 xs:py-1.5 xs:px-3 font-semibold duration-300 hover:bg-black hover:text-white xs:text-gray-500 xs:hidden md:inline-block">Get Started</Link>
+                  
                 </> : 
                 <>
-                  <MenuCart/>
+         
                   <UserProfile session={session} />
                   
                 </>
                 }
+                  
             </div>
             <div className="md:hidden ml-2 cursor-pointer">
               {

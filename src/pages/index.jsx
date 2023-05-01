@@ -12,6 +12,7 @@ import ToastContext from "@/contexts/toast"
 import { useRouter } from "next/router"
 import Footer from "@/components/footer"
 import LoaderContext from "@/contexts/loader"
+import Link from "next/link"
 
 export default function Home() {
   const router=useRouter()
@@ -52,7 +53,7 @@ export default function Home() {
                 <p className="text-gray-400 md:mt-2 xs:mt-4 md:text-sm xs:text-[12px] xs:w-3/4 xs:m-auto md:w-full md:m-0">Start or advance your career with our quality courses at the most affordable prices. We crush the barriers to your learning</p>
                 <div className="mt-8">
         
-                <button className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]">Join for Free</button>
+                <Link href='/auth/register' className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]">Join for Free</Link>
                 
                 </div>
               
@@ -88,8 +89,8 @@ export default function Home() {
             {
               courses.slice(0,8).map((data)=>{
                 return (
-                  <div  className="shadow-lg border border-solid border-gray-500 cursor-pointer" key={data.id}>
-                      <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover sm:h-[150px] xs:h-[100px]" width={300} height={300} onClick={()=>{
+                  <div  className="shadow-lg border border-solid border-gray-500 " key={data.id}>
+                      <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover sm:h-[150px] xs:h-[100px] cursor-pointer" width={300} height={300} onClick={()=>{
                     setShowLoader(true)
                       router.push(
                         { pathname: `/courses/${data.id}`},
@@ -97,7 +98,7 @@ export default function Home() {
                       );
                   }}/>
                       <div className="p-3">
-                        <h3 className="text-black sm:text-sm xs:text-[10px] font-semibold" onClick={()=>{
+                        <h3 className="text-black sm:text-sm xs:text-[10px] font-semibold cursor-pointer" onClick={()=>{
                     setShowLoader(true)
                       router.push(
                         { pathname: `/courses/${data.id}`},

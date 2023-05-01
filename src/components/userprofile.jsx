@@ -28,7 +28,7 @@ export default  function UserProfile(props) {
       <>
         <a className='cursor-pointer' ref={btnRef}  onClick={onOpen}>
             {
-               props.session?.user?.profile?.Image ? <Image src={props.session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center w-12 h-12 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase text-xl">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
+               props.session?.user?.profile?.Image ? <Image src={props.session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center xs:h-9 xs:w-9 xs:text-sm md:w-12 md:h-12 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase lg:text-xl">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
             }
         </a>
     

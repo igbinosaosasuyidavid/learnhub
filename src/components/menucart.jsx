@@ -59,7 +59,7 @@ export default function MenuCart() {
     <div className='border-0 bg-transparent z-50 '>
     <Popover >
         <PopoverTrigger>
-            <a  className="text-secondary hover:text-opacity-80 relative cursor-pointer block"><BsCart3 size={24}/>{cart.length!==0 && <span className="absolute bottom-3.5 bg-secondary text-white rounded-full flex items-center justify-center w-4 h-4 text-xs left-3.5 font-bold text-[11px]">{cart.length}</span>}</a>
+            <a  className="text-secondary hover:text-opacity-80 relative cursor-pointer block"><BsCart3 className='xs:text-[20px] md:text-xl'/>{cart.length!==0 && <span className="absolute bottom-3.5 bg-secondary text-white rounded-full flex items-center justify-center md:w-4 md:h-4 text-xs xs:w-3 xs:h-3 left-3.5 font-bold lg:text-[11px] xs:text-[8px]">{cart.length}</span>}</a>
         </PopoverTrigger>
         <div className=''>
           <PopoverContent>
@@ -95,7 +95,7 @@ export default function MenuCart() {
                         </div>
                   </> 
                   :
-                  <p className='text-sm text-gray-600'>No items in your cart</p>
+                  <p className='md:text-sm xs:text-xs text-gray-600'>No items in your cart</p>
                   
                 
                 }

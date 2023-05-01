@@ -18,6 +18,7 @@ import { BsArrowBarLeft } from "react-icons/bs";
 import { useSession } from "next-auth/react";
 import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
+import Footer from "@/components/footer";
 
 
 
@@ -25,7 +26,7 @@ export const getServerSideProps=async (context)=>{
 
     const result=await prisma.user.findFirst({
         where:{
-            id:context.params.id
+            id:context.params.user_id
         },
         select:{
             createdCourses:{
@@ -36,9 +37,9 @@ export const getServerSideProps=async (context)=>{
             }
         }
     })
-    console.log(result);
+
     return {
-        props: {courses:result.createdCourses.length!==0?JSON.parse(JSON.stringify(result?.createCourses)):[]},
+        props: {courses:result.createdCourses.length!==0?JSON.parse(JSON.stringify(result?.createdCourses)):[]},
     }
 }
 
@@ -292,46 +293,60 @@ function Course({courses}) {
         <>
             {
                 !courseModal &&
-                <div className="border-t border-gray-200">
+                <div className="border-t border-gray-200 xs:px-6 lg:px-0">
                     <div className="custom-container ">
-                        <h3 className="text-4xl text-center mt-10 mb-4">My courses</h3>
+                        <h3 className="md:text-4xl xs:text-2xl text-center mt-10 mb-4">My courses</h3>
                         <div className="flex justify-end mb-7">
-                            <button className="ml-auto bg-secondary text-white p-2 rounded-lg inline-flex gap-1 items-center duration-300 hover:opacity-90" onClick={(e)=>{e.preventDefault();setCreateModal(true)}}><MdAdd size={25}/> Create New Course</button>
+                            <button className="ml-auto bg-secondary text-white p-2 xs:py-1 rounded-lg inline-flex gap-1 items-center duration-300 hover:opacity-90 md:text-sm xs:text-xs" onClick={(e)=>{e.preventDefault();setCreateModal(true)}}><MdAdd size={25}/> New Course</button>
                         </div>
                     
-             
+                
                         {
                             courses.length!==0?
                             <>
-                            <div className="grid grid-cols-4 gap-5">
-                            {
-                                courses.map((data)=>{
+                         
+                            <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-5 xs:grid-cols-2 xs:mb-14">
+           
+                                {
+                                    courses.map((data)=>{
                                     return (
-                                    <div  className="shadow-lg border border-solid border-gray-500" key={data.id}>
-                                        <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover h-[150px]" width={200} height={200} />
-                                        <div className="p-3">
-                                            <h3 className="text-black text-sm font-semibold">{data.title.length>50?data.title.slice(0,50)+'...':data.title}</h3>
-                                        
-                                            <h3 className="text-sm mt-2 mb-1"><span className="font-bold">{data.lessons.length}</span> {data.lessons.length===1?"Lesson":"Lessons"}</h3>
-                                            <h3 className="font-bold text-lg flex items-center pb-3 z-50 mt-3">
-                                            <span>{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(data.price).toFixed(3))}</span>
-                            
-                                            <button className="flex items-center gap-1 border bg-secondary text-white hover:opacity-90 duration-300 py-0 px-2 text-[11px] rounded-md ml-auto" onClick={()=>editCourse(data)}> <FiEdit size={15} /> Edit</button>
+                                        <div  className="shadow-lg border border-solid border-gray-500 cursor-pointer" key={data.id}>
+                                            <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover sm:h-[150px] xs:h-[100px]" width={300} height={300} onClick={()=>{
+                                        setShowLoader(true)
+                                            router.push(
+                                            { pathname: `/courses/${data.id}`},
+                                            "/courses/"+data.id
+                                            );
+                                        }}/>
+                                            <div className="p-3">
+                                            <h3 className="text-black sm:text-sm xs:text-[10px] font-semibold" onClick={()=>{
+                                        setShowLoader(true)
+                                            router.push(
+                                            { pathname: `/courses/${data.id}`},
+                                            "/courses/"+data.id
+                                            );
+                                        }}>{data.title.length>50?data.title.slice(0,50)+'...':data.title}</h3>
+                                         
+                                            <h3 className="font-bold sm:text-lg xs:text-[13px] flex items-center pb-3 z-50 mt-2">
+                                                <span>{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(data.price).toFixed(3))}</span>
+                                                <button className="flex items-center gap-1 border bg-secondary text-white hover:opacity-90 duration-300 sm:py-1 sm:px-2 xs:py-1 xs:px-1 text-[11px] rounded-md ml-auto" onClick={()=>editCourse(data)}> <FiEdit size={15} /> <span className="xs:hidden md:inline">Edit</span></button>
                                             </h3>
-                                
                                     
-                        
+                            
+                            
+                                            
+                                            </div>
                                         
                                         </div>
-                                        
-                                    </div>
                                     )
-                                })
+                                    })
                                 }
                             </div>
+                      
+                          
                             </>
                             :
-                            <p className="text-center my-7 w-full">You don&apos;t have any course yet</p>
+                            <p className="text-center my-7 w-full xs:text-xs md:text-sm !min-h-screen mt-14">You don&apos;t have any course yet</p>
 
                         }
                     
@@ -343,42 +358,42 @@ function Course({courses}) {
         <>
             {
                 courseModal &&
-                <div className="border-t border-gray-200">
+                <div className="border-t border-gray-200  xs:px-6 lg:px-0">
                     <div className="custom-container">
-                        <div className=" bg-white rounded-md p-6 relative">
-                            <span className="absolute top-2 right-3 text-lg hover:text-gray-500 cursor-pointer duration-300 inline-flex gap-2 items-center text-secondary font-semibold" onClick={()=>{setCourseModal(false);setLoaded(0)}}><BsArrowBarLeft/> Back</span>
+                        <div className=" bg-white rounded-md relative pt-14">
+                            <span className="absolute top-2 right-3 md:text-sm xs:text-xs hover:text-gray-500 cursor-pointer duration-300 inline-flex gap-2 items-center text-secondary font-semibold" onClick={()=>{setCourseModal(false);setLoaded(0)}}><BsArrowBarLeft/> Back</span>
                             <div className="">
                                 <form onSubmit={courseUpdate} method="POST" className="w-full">
-                                    <h2 className="text-black font-medium mb-3 text-2xl">
+                                    <h2 className="text-black mb-3 md:text-2xl xs:text-xl font-semibold">
                                         Edit Course
                                     </h2>
-                                    <div className="flex gap-6 items-center">
-                                        <div className="w-3/5">
+                                    <div className="md:flex gap-6 items-center">
+                                        <div className="md:w-3/5">
                                             <div className="mb-3">
-                                            <label htmlFor="title" className="text-sm">Title</label>
+                                            <label htmlFor="title" className="text-sm text-gray-400">Title</label>
                                             <input type="text" name="title" className="bg-slate-100 w-full p-2 px-3 rounded-lg text-sm" placeholder="Course Title" defaultValue={currentCourse.title} id="title"/>
 
                                             </div>
                                             <div className="mb-3">
-                                                <label htmlFor="description" className="text-sm">Title</label>
+                                                <label htmlFor="description" className="text-sm text-gray-400">Description</label>
                                                 <textarea name="description" className="bg-slate-100 w-full p-2 px-3 rounded-lg text-sm outline-none shadow-none resize-none" placeholder="Course Description" defaultValue={currentCourse.description.slice(0,200)+'...'} id="description" rows={6}/>
 
                                             </div>
                                             <div className="mb-3">
-                                                <label htmlFor="description" className="text-sm" >Price</label>
+                                                <label htmlFor="description" className="text-sm text-gray-400" >Price</label>
                                                 <input type="number" name="price" className="bg-slate-100 w-full p-2 px-3 rounded-lg text-sm" placeholder="Course Price" defaultValue={currentCourse.price} id="ptitle" step=".01"/>
                                             </div>
                                         </div>
-                                        <div className="w-2/5">
+                                        <div className="md:w-2/5">
                                             <div className="mb-3">
-                                                <p>Course Image</p>
+                                                <p className="mb-2 text-gray-400 xs:mt-8 md:mt-0">Course Image</p>
                                                 <div onClick={()=>{document.getElementById("image").click()}} className="p-2 bg-gray-200 rounded cursor-pointer inline-block w-fit">
                                                     Upload image
                                                 </div>
                                                 <input type="file"
-                                                name="image" hidden onChange={(e)=>{handleImage(e,false)}} id="image" placeholder="Price in $(USD)" className="p-4 px-6 rounded-lg bg-slate-100"/>
+                                                name="image" hidden onChange={(e)=>{handleImage(e,false)}} id="image" placeholder="Price in $(USD)" className="p-4 px-6 rounded-lg bg-slate-100" accept=".jpg,.jpeg,.png,.svg,.webp" />
                                                 <div className="preview-box mt-9">
-                                                    <Image src={currentCourse.featuredImage} alt="course-img" className="rounded-lg" width={200} height={200}/>
+                                                    <Image src={currentCourse.featuredImage} alt="course-img" className="rounded-lg w-full xs:h-[200px] object-cover" width={300} height={300}/>
                                                 </div>
                                             </div>
                                         </div>
@@ -390,33 +405,33 @@ function Course({courses}) {
                                 
                                 
                                 
-                                <button type="submit" className=" w-fit py-3 px-6 bg-secondary text-white rounded-lg mt-3">Save Changes</button>
+                                <button type="submit" className=" w-fit py-3 px-6 bg-secondary text-white rounded-lg mt-3 md:text-sm xs:text-xs">Save Changes</button>
                                     
                                 
 
                                         
                                 </form>
                             </div>
-                            <h3 className="text-xl font-medium mb-1 mt-5">Course Lessons</h3>
-                            <div className="flex gap-9 mt-7 ">
-                                <div className="w-3/5">
+                            <h3 className="text-xl font-medium mb-1 mt-14">Course Lessons</h3>
+                            <div className="md:flex gap-9 md:mt-7">
+                                <div className="md:w-3/5 xs:mb-14">
                                 
                                     {
                                         currentCourse.lessons.length!==0? <>
                                         {
                                                 currentCourse.lessons.map((data,i)=>
                                                 <div className="flex gap-2 border-b border-t py-2 border-gray-100" key={data.id}>
-                                                    <p>{i+1})</p>
-                                                    <h1>{data.title?.length>30? data.title.slice(0,30)+'...':data.title}</h1>
-                                                    <p className="ml-auto text-sm font-bold">{data.duration}</p>
+                                                    <p className="xs:text-xs md:text-xs">{i+1})</p>
+                                                    <h1 className="xs:text-xs md:text-xs">{data.title?.length>30? data.title.slice(0,30)+'...':data.title}</h1>
+                                                    <p className="ml-auto xs:text-xs md:text-xs font-bold">{data.duration}</p>
                                                 </div>
                                                 )
                                         }
                                             
-                                        </>:<p className="text-sm">No lessons for this course</p>
+                                        </>:<p className="!min-h-fit text-sm">No lessons for this course</p>
                                     }
                                 </div>
-                                <div className="w-2/5">
+                                <div className="md:w-2/5  mb-7">
                                 
                                     <form onSubmit={createLesson} method="POST" className="w-full">
                                         <h2 className="text-black font-medium mb-3 text-md">Add New Lesson</h2>
@@ -438,13 +453,13 @@ function Course({courses}) {
                                         <div onClick={()=>{document.getElementById("vid").click()}} className="p-2 bg-gray-100 rounded cursor-pointer inline-flex w-fit text-sm mb-3  items-center gap-2 mt-3">
                                         <FiFilePlus size={25}/> Upload Video
                                         </div>
-                                        <input type="file" name="video" hidden onChange={handleChange} required id="vid" />
+                                        <input type="file" name="video" hidden onChange={handleChange} required id="vid" accept=".mp4,.mkv" />
                                         <div className="preview-box2">
                                             
                                         </div>
                                     
                 
-                                    <button type="submit" className=" w-full py-3 bg-secondary text-white rounded-lg mt-3">Save</button>
+                                    <button type="submit" className=" w-full py-3 bg-secondary text-white rounded-lg mt-3 text-sm">Save</button>
                                     </form>
                                 
                                 </div>
@@ -463,39 +478,39 @@ function Course({courses}) {
             {
                 createModal && <>
                     <div className="fixed top-0 bg-[rgb(0,0,0,0.3)] w-full h-screen flex items-center justify-center">
-                    <div className=" bg-white rounded-md p-6 relative w-[600px]">
+                    <div className=" bg-white rounded-md p-6 relative md:w-[600px] xs:w-[94%]">
                             <span className="absolute top-2 right-3 text-lg hover:text-gray-500 cursor-pointer duration-300 inline-flex gap-2 items-center text-secondary font-semibold" onClick={(e)=>{e.preventDefault();setCreateModal(false)}}><FaTimes/></span>
                             <div className="">
                                 <form onSubmit={createCourse} method="POST" className="w-full">
-                                    <h2 className="text-black font-medium mb-3 text-2xl">
+                                    <h2 className="text-black font-medium mb-3 md:text-2xl xs:text-lg">
                                         Create Course
                                     </h2>
-                                    <div className="flex gap-6 items-center">
-                                        <div className="w-3/5">
+                                    <div className="md:flex gap-6 items-center">
+                                        <div className="md:w-3/5">
                                             <div className="mb-3">
                                    
-                                            <input type="text" name="title_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg text-sm" placeholder="Course Title"  id="title_c"/>
+                                            <input required type="text" name="title_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg md:text-sm xs:text-xs" placeholder="Course Title"  id="title_c"/>
 
                                             </div>
                                             <div className="mb-3">
                                           
-                                                <textarea name="description_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg text-sm outline-none shadow-none resize-none" placeholder="Course Description"  id="description_c" rows={6}/>
+                                                <textarea required name="description_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg md:text-sm xs:text-xs outline-none shadow-none resize-none" placeholder="Course Description"  id="description_c" rows={6}/>
 
                                             </div>
                                             <div className="mb-3">
                                          
-                                                <input type="number" name="price_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg text-sm" placeholder="Course Price" id="price_c" step=".01"/>
+                                                <input required type="number" name="price_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg md:text-sm xs:text-xs" placeholder="Course Price" id="price_c" step=".01"/>
 
                                             </div>
                                         </div>
-                                        <div className="w-2/5">
+                                        <div className="md:w-2/5">
                                             <div className="mb-3">
-                                                <p>Course Image</p>
-                                                <div onClick={()=>{document.getElementById("image_c").click()}} className="p-2 bg-gray-200 rounded cursor-pointer inline-block w-fit">
+                                                <p className="md:text-sm xs:text-xs my-2">Course Image</p>
+                                                <div onClick={()=>{document.getElementById("image_c").click()}} className="p-2 bg-gray-100 rounded cursor-pointer inline-block w-fit text-gray-600 md:text-sm xs:text-xs">
                                                     Upload image
                                                 </div>
-                                                <input type="file"
-                                                name="image_c" hidden onChange={(e)=>handleImage(e,true)} id="image_c" placeholder="Price in $(USD)" className="p-4 px-6 rounded-lg bg-slate-100"/>
+                                                <input type="file" required
+                                                name="image_c" hidden onChange={(e)=>handleImage(e,true)} id="image_c" placeholder="Price in $(USD)" className="p-4 px-6 rounded-lg bg-slate-100" accept=".jpg,.jpeg,.png,.svg,.webp" />
                                                 <div className="preview-box3 mt-9">
                                                    
                                                 </div>
@@ -525,6 +540,7 @@ function Course({courses}) {
             }
         
         </>
+        <Footer/>
     </>
    
   );

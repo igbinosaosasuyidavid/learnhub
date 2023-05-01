@@ -48,7 +48,7 @@ export const getServerSideProps=async ({ req, res ,params})=>{
     
       })
     
-      console.log(result,courses);
+
   
     return {
         props: {course: JSON.parse(JSON.stringify(result)),userIsStudent:courses? courses.length!==0?true:false:false}
@@ -93,21 +93,21 @@ function Course({course,userIsStudent}) {
     <>
         <Nav/>
       
-        <div className="bg-[rgb(128,128,128,0.04)] py-6">
+        <div className="bg-[rgb(128,128,128,0.04)] py-6 xs:px-6  lg:px-0">
             <div className="custom-container">
-                <div className="flex items-center gap-6">
-                    <Image src={course.featuredImage} alt="course-Image"  className="h-72 w-1/2 object-cover rounded-xl" width={500} height={500}/>
-                    <div className="w-1/2">
-                    <h2 className="text-black font-semibold text-2xl mb-2">{course.title}</h2>
-                    <h2>{course.description?.length>200 ? course.description?.slice(0,200)+'...':course.description}</h2>
-                    <div className="flex items-center mt-3 mb-6"><FaUserFriends size={20}  className="mr-2 text-secondary"/> <span className="text-lg text-black font-semibold mr-1">{course.studentIds?.length}</span> <span className="text-md">{course.studentIds?.length===1? 'Student':"Students"}</span></div>
+                <div className="md:flex items-center gap-6">
+                    <Image src={course.featuredImage} alt="course-Image"  className="md:h-72 md:w-1/2 xs:h-44 object-cover rounded-xl" width={500} height={500}/>
+                    <div className="md:w-1/2">
+                    <h2 className="text-black font-semibold md:text-2xl xs:text-xl mb-2 mt-4 md:mt-0">{course.title}</h2>
+                    <h2 className="xs:text-xs md:text-sm">{course.description?.length>200 ? course.description?.slice(0,200)+'...':course.description}</h2>
+                    <div className="flex items-center mt-3 mb-6"><FaUserFriends   className="mr-2 text-secondary text-sm md:text-lg"/> <span className="md:text-lg xs:text-sm text-black font-semibold mr-1">{course.studentIds?.length}</span> <span className="xs:text-sm">{course.studentIds?.length===1? 'Student':"Students"}</span></div>
 
                     <h3 className="text-md text-black mb-2">Course Instructor</h3>
                     <div className="flex gap-2 items-center">
                         {
-                        session?.user?.profile?.img ? <Image src={session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center w-10 h-10 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase text-xl">{course.author?.fullName.match(/\b(\w)/g).join('')}</div>
+                        session?.user?.profile?.img ? <Image src={session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center md:w-10 md:h-10 xs:w-8 xs:h-8 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase md:text-xl xs:text-sm">{course.author?.fullName.match(/\b(\w)/g).join('')}</div>
                         }
-                        <h3 className=""><span className="text-black font-medium text-sm">{course.author?.fullName}</span><span className="text-xs m-0 p-0 !text-primary flex items-center gap-1"><BsStar/> Experienced</span></h3>
+                        <h3 className=""><span className="text-black font-medium md:text-sm xs:text-[13px]">{course.author?.fullName}</span><span className="md:text-xs xs:text-[9px] m-0 p-0 !text-primary flex items-center gap-1"><BsStar/> Experienced</span></h3>
                     
                     </div>
                 </div>
@@ -115,11 +115,11 @@ function Course({course,userIsStudent}) {
 
             </div>
         </div>
-        <div>
+        <div className="xs:px-6  lg:px-0">
             <div className="custom-container">
-                <div className="flex mt-8 gap-8 mb-10">
-                    <div className="w-4/6">
-                        <h1 className="text-2xl text-black font-semibold mb-2">Course Content</h1>
+                <div className="md:flex mt-8 gap-8 mb-10">
+                    <div className="md:w-4/6 xs:mb-8 md:mb-0">
+                        <h1 className="md:text-2xl xs:text-xl text-black font-semibold mb-2">Course Content</h1>
 
                         {
                             course.lessons.length!==0? <>
@@ -129,28 +129,28 @@ function Course({course,userIsStudent}) {
                                         if (session.user) {
                                             setToast("Please purchase this course to be enrolled",'info')
                                         }else{
-                                            router.push("/suth/register")
+                                            router.push("/auth/register")
                                         }
                                         
                                     }else{
                                         showLesson(data)
                                     }}}>
-                                        <h1>{data.title}</h1>
-                                        <span className="ml-auto inline-flex items-center gap-2"><MdOndemandVideo size={20}/>{data.duration}</span>
+                                        <h1 className="xs:text-sm md:text-lg">{data.title}</h1>
+                                        <span className="ml-auto inline-flex items-center gap-2"><MdOndemandVideo className="md:text-[20px] xs:text-[16px]"/><span className="xs:text-[12px] md:text-lg">{data.duration}</span></span>
                         
 
                                     </div>
                                 )
                                 }
-                            </>:<p>No Lessons yet for this course</p>
+                            </>:<p className="xs:text-xs md:text-sm">No Lessons yet for this course</p>
                         }
                     
                        
                     </div>
-                    <div className="w-2/6">
+                    <div className="md:w-2/6">
                         {
                             userIsStudent? <div className="mt-4">
-                                    <p className="text-2xl">Howdy, {session.user?.name}</p>
+                                    <p className="md:text-2xl xs:text-sm">Howdy, {session.user?.name}</p>
 
                                     <div className=" mt-5">
                                         <div className="w-full p-1 bg-slate-100 rounded-3xl">
@@ -158,19 +158,19 @@ function Course({course,userIsStudent}) {
 
                                             </div>
                                         </div>
-                                        <p className="text-sm flex items-center gap-2 mt-3">Your course is <span className="font-bold text-lg text-secondary">3%</span> Completed</p>
+                                        <p className="md:text-sm xs:text-[13px] flex items-center gap-2 mt-3">Your course is <span className="font-bold xs:text-sm md:text-lg text-secondary">3%</span> Completed</p>
 
-                                        <button className="bg-primary text-[#ffffff] rounded-lg py-2 px-4 shadow-md mt-4 hover:opacity-90 duration-300">
+                                        <button className="bg-primary text-[#ffffff] rounded-lg py-2 px-4 shadow-md mt-4 hover:opacity-90 duration-300 xs:text-xs md:text-sm">
                                             Contine Learning
                                         </button>
                                     </div>
                                 </div> : <>
                                 <div className="flex items-center mb-4">
-                                    <h4 className="font-semibold text-3xl">{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(course.price).toFixed(3))}</h4>
+                                    <h4 className="font-semibold md:text-3xl xs:text-xl">{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(course.price).toFixed(3))}</h4>
                                     <span className="font-normal !text-sm ml-auto">14 days refund policy</span>
                                 </div>
                             
-                                <button className="bg-secondary text-white p-3 w-full rounded-lg font-semibold mb-3 hover:opacity-90 duration-300"onClick={()=>{
+                                <button className="bg-secondary text-white p-3 w-full rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"onClick={()=>{
                                     addToCart(course,(err)=>{
                                     
                                         if(err) {setToast(`Already in your cart`,'info')}else {setToast(`Added to cart.`,'success');window.scrollTo(0, 0);}
@@ -178,7 +178,7 @@ function Course({course,userIsStudent}) {
 
                                     
                                     })}}>Add to Cart</button>
-                                <button className="bg-transparent text-black p-3 w-full border border-gray-500 rounded-lg hover:bg-gray-100 duration-300 focus:border-gray-500 font-semibold"  onClick={checkOut} >Purchase Now</button>
+                                <button className="bg-transparent text-black p-3 w-full border border-gray-500 rounded-lg hover:bg-gray-100 duration-300 focus:border-gray-500 font-semibold xs:text-xs md:text-sm"  onClick={checkOut} >Purchase Now</button>
                             </>
                         }
                         
@@ -190,8 +190,8 @@ function Course({course,userIsStudent}) {
         <>
         {
             currentLesson &&
-            <div className="fixed top-0 bg-[rgb(0,0,0,0.5)] flex items-center justify-center h-screen w-full ">
-                <div className="bg-white relative w-[550px] h-[570px] p-7 rounded-lg overflow-y-scroll">
+            <div className="fixed top-0 bg-[rgb(0,0,0,0.5)] flex items-center justify-center h-screen w-full z-[999999]">
+                <div className="bg-white relative md:w-[550px] xs:w-full md:h-[570px] xs:h-full p-7 rounded-lg overflow-y-scroll">
                 <span className="absolute top-4 right-5 text-lg hover:text-gray-500 cursor-pointer duration-300 inline-flex gap-2 items-center text-secondary font-semibold" onClick={(e)=>{e.preventDefault();showLesson(false);setVideo(false)}}><FaTimes/></span>
                     <h2 className="text-xl font-semibold mb-3 mt-4">{currentLesson.title}</h2>
                     {
@@ -207,9 +207,9 @@ function Course({course,userIsStudent}) {
             
                     <div key={data.id}>
                      
-                        <div className={`flex items-center p-4 px-5 rounded-md ,128,128,0.05)] hover:bg-[rgb(128,128,128,0.1)] duration-300  cursor-pointer ${data.title===currentLesson.title?"bg-gray-200":""}`} onClick={()=>{showLesson(data)}} key={data.id}>
-                            <h1>{data.title}</h1>
-                            <span className="ml-auto inline-flex items-center gap-2"><MdOndemandVideo size={20}/>{data.duration}</span>
+                        <div className={`flex items-center p-4 px-5 rounded-md ,128,128,0.05)] hover:bg-[rgb(128,128,128,0.1)] duration-300  cursor-pointer ${data.title===currentLesson.title?"bg-gray-200":""}`} onClick={()=>{setVideo(false);showLesson(data)}} key={data.id}>
+                            <h1 className="xs:text-sm md:text-lg">{data.title}</h1>
+                            <span className="ml-auto inline-flex items-center gap-2"><MdOndemandVideo className="xs:text-[16px] md:text-[20px]"/><span className="xs:text-[12px] md:text-lg">{data.duration}</span></span>
             
 
                         </div>

@@ -124,38 +124,38 @@ function Register() {
     //     </div>
     //   </div>
     // </div>
-      <div className="bg-[url('/login4.png')] min-h-screen bg-fixed  bg-cover bg-center bg-no-repeat overlay">
-      <div className="h-fit m-auto max-w-screen-lg ">
-        <div className="flex m-auto items-center justify-center h-full w-[370px]">
+    <div className="flex items-center bg-[url('/login4.png')] min-h-screen bg-fixed  bg-cover xs:bg-center md:bg-center bg-no-repeat overlay xs:px-6  lg:px-0">
+    <div className="h-full m-auto w-full">
+      <div className="flex m-auto items-center justify-center h-full md:w-[400px] xs:w-full">
           <div className="text-center w-full">
-            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 h-32 w-32' width={200} height={200}/>
+            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 md:h-28 md:w-28 xs:h-24 xs:w-24' width={200} height={200}/>
         
             
-            <h1 className="text-left text-white text-2xl mb-3  mt-7">Start your journey now</h1>
+            <h1 className="text-left text-white md:text-2xl xs:text-xl mb-3  mt-7">Start your journey now</h1>
             <form onSubmit={registerUser}>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
                 <FaUser color={'white'} className="w-1/6"/>
-                <input type="text" name="fname" placeholder="First Name" id="fname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+                <input type="text" name="fname" placeholder="First Name" id="fname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
               </div>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
                 <FaUser color={'white'} className="w-1/6"/>
-                <input type="text" name="lname" placeholder="Last Name" id="lname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+                <input type="text" name="lname" placeholder="Last Name" id="lname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
               </div>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
                 <FaEnvelope color={'white'} className="w-1/6"/>
-                <input type="email" name="email" placeholder="Email Address" id="email" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+                <input type="email" name="email" placeholder="Email Address" id="email" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
               </div>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
                 <FaLock color={'white'} className="w-1/6"/>
-                <input type="password" name="password" placeholder="Password" id="password" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+                <input type="password" name="password" placeholder="Password" id="password" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
               </div>
            
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
                 <FaLock color={'white'} className="w-1/6"/>
-                <input type="password" name="cpassword" placeholder="Confirm Password" id="cpassword" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300" required/>
+                <input type="password" name="cpassword" placeholder="Confirm Password" id="cpassword" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
               </div>
               <div className="flex mb-5 mt-3">
-                  <button type="submit" className="w-full bg-secondary text-white rounded-[50px] py-4 p-4 tracking-[0.4rem] font-semibold hover:opacity-90 duration-300">REGISTER</button>
+                  <button type="submit" className="w-full bg-secondary text-white rounded-[50px] py-4 p-4 xs:py-4 md:text-[16px] xs:text-[12px] tracking-[0.4rem] font-semibold hover:opacity-90 duration-300">REGISTER</button>
               </div>
               <div className="flex items-center">
                 <div>
@@ -165,7 +165,7 @@ function Register() {
             
               </div>
               <div className="flex">
-                <Link href="/auth/login" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer" onClick={(e)=>{e.preventDefault();router.push('/auth/login')}}>LOGIN</Link>
+                <Link href="/auth/login" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer  md:text-[16px] xs:text-[13px]" onClick={(e)=>{e.preventDefault();router.push('/auth/login')}}>LOGIN</Link>
   
               </div>
               
@@ -173,15 +173,15 @@ function Register() {
           </div>
   
         </div>
-        <div className="flex m-auto items-center justify-center bg-transparent mt-14">
-          <div className="w-1/2">
+        <div className="md:flex items-center mb-4 justify-center bg-transparent mt-7 w-[70%] m-auto">
+          <div className="md:w-1/2 xs:text-center md:text-left">
             <div>
-              <Link href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300">Privacy Policy</Link>
-              <Link href="/privacy" className="mr-2 text-gray-300 text-sm hover:text-white duration-300" >Terms and Conditions</Link>
+              <Link href="/privacy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300">Privacy Policy</Link>
+              <Link href="/privacy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300" >Terms and Conditions</Link>
             </div>
           </div>
-          <div className="w-1/2 text-right">
-            <span className="ml-auto text-gray-300 text-sm">&copy; Copyright The Valley. All right reserved</span>
+          <div className="md:w-1/2 xs:text-center md:text-right">
+            <span className="ml-auto text-gray-300 md:text-xs xs:text-[11px]">&copy; Copyright The Valley. All right reserved</span>
           </div>
         </div>
       </div>

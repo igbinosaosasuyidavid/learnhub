@@ -8,7 +8,7 @@ function Loader() {
   return (
     <>
     {showLoader === true ? (
-        <div className="flex justify-center items-center fixed h-full w-full bg-black opacity-70 z-[200]">
+        <div className="flex justify-center items-center fixed h-full w-full bg-black opacity-70 z-[999999]">
             <span className="loader"></span>
         </div>
     

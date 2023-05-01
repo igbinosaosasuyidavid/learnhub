@@ -17,7 +17,7 @@ export default function Toast() {
     return (
     <Button
         id='toaster'
-        className='!hidden !z-index-[888888888888]'
+        className='!hidden !z-index-[99999999999999999999999]'
         onClick={() =>
         toast({
             title: message,

@@ -42,9 +42,10 @@ button:focus{
     background-color:rgb(98, 85, 164,0.8);
    
   }
-  button.activeCat{
+  .activeCat,  .activeCat:active ,  .activeCat:focus{
     color: black !important;
     border-color: black !important;
+    border-style: solid;
     font-weight: 700 !important;
   }
 

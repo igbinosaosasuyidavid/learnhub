@@ -1,56 +1,66 @@
+
 import prisma from "../../../../../prisma/db";
-import path from "path"
-import formidable from "formidable";
+import multer from "multer";
+import { v2 as cloudinary } from "cloudinary";
+
+import streamifier from "streamifier";
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
+const uploadMiddleware = upload.single("courseImage");
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key: process.env.API_KEY,
+  api_secret: process.env.API_SECRET,
+  secure: true,
+});
+function runMiddleware(req, res, fn) {
+  return new Promise((resolve, reject) => {
+    fn(req, res, (result) => {
+      if (result instanceof Error) {
+        return reject(result);
+      }
+      return resolve(result);
+    });
+  });
+}
+export default async function handler(req, res) {
+
+  await runMiddleware(req, res, uploadMiddleware);
+
+  const stream = await cloudinary.uploader.upload_stream(
+    {
+      folder: "courseFeatured",
+    },
+     async (error, result) => {
+      if (error) return res.status(500).send("Sorry an error occured on the server");
+      console.log(req.body.courseCats,'-------');
+      const course = await prisma.course.create({
+        data: {
+          title:req.body.title,
+          description:req.body.description,
+          price:parseFloat(req.body.price),
+          featuredImage:result.secure_url,
+          author:{
+            connect:{
+              id:req.body.user_id
+            },
+        
+
+          },
+          categories:{
+            connect:JSON.parse(req.body.courseCats).map(data=>({id:data}))
+          }
+        },
+      });
+
+    return res.status(200).json({course,success:true})
+    }
+  );
+  streamifier.createReadStream(req.file.buffer).pipe(stream);
+}
+
 export const config = {
   api: {
     bodyParser: false,
   },
 };
-
-export default async function handler(req, res) {
-  if (req.method?.toUpperCase() === "POST") {
-    try {
-      await prisma.$connect()
-      const form = formidable({
-        uploadDir:path.join(process.cwd(), "/public/images"),
-        filename:(name, ext, path, form) => {
-          return Date.now().toString() + "_" + path.originalFilename
-        }
-      });
-      
-      form.parse(req, async (err, fields, files) => {
-        if (err) {
-          return res.json({ err });
-        }
-
-        const course = await prisma.course.create({
-              data: {
-                title:fields.title,
-                description:fields.description,
-                price:parseFloat(fields.price),
-                featuredImage:fields.host+'/images/'+files.courseImage.newFilename,
-                author:{
-                  connect:{
-                    id:fields.user_id
-                  }
-
-                }
-              },
-            });
-      
-          return res.status(200).json({course,success:true})
-       
-      });
-     
-    
-
-      } catch (err) {
-        console.log(err);
-        return res.status(500).send("Sorry an error occured on the server");
-      }
-    
-
-  }
-
-}
-

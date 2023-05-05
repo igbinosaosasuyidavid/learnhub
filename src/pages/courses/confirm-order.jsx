@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 import CartContext from '@/contexts/cart';
 import ToastContext from '@/contexts/toast';
 import Image from 'next/image';
+import Link from 'next/link';
 // Make sure to call `loadStripe` outside of a component’s render to avoid
 // recreating the `Stripe` object on every render.
 
@@ -29,7 +30,7 @@ export default function ConfirmOrder() {
                     setToast("Payment Successful. You are now enrolled into all courses paid for","success")
                     setTimeout(() => {
                         router.push("/user/order-history")
-                    }, 2000);
+                    }, 3000);
                     
                     
                 }else{
@@ -52,7 +53,13 @@ export default function ConfirmOrder() {
         {
             failed?
             <div className='flex h-screen w-full justify-center items-center'>
-                <h1 className='text-center'>Sorry we coudn&apos;t receive your payment please try checking out again</h1>
+                <div className='h-full w-full'>
+                    <Image src="/logo.svg" alt="" className='text-center !inline' width={100} height={100}/>
+                    <h1 className='text-center h-full mt-9 xs:text-sm md:text-lg'>Sorry we coudn&apos;t receive your payment please try checking out again</h1>
+
+                    <Link href={"/"} className='mt-6 xs:text-xs md:text-sm' >Back to Home</Link>
+                </div>
+              
             </div>
             :
             <div className="flex justify-center items-center fixed h-full w-full bg-white  z-[200] text-center">

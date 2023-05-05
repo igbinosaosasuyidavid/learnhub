@@ -16,18 +16,19 @@ import Link from "next/link"
 
 export default function Home() {
   const router=useRouter()
-  const [activeCategory,setActiveCategory]=useState('all categories')
+
   const {addToCart}=useContext(CartContext)
   const {setToast}=useContext(ToastContext)
   const [courses,setCourses]=useState([])
 
   const [loadCourse,setLoadCourse]=useState(true)
   const {setShowLoader}=useContext(LoaderContext)
+  const {data:session}=useSession()
 
 
   useEffect(()=>{
     getCourses()
-   
+    setShowLoader(false)
   },[courses])
 
   const getCourses= async ()=>{
@@ -53,7 +54,7 @@ export default function Home() {
                 <p className="text-gray-400 md:mt-2 xs:mt-4 md:text-sm xs:text-[12px] xs:w-3/4 xs:m-auto md:w-full md:m-0">Start or advance your career with our quality courses at the most affordable prices. We crush the barriers to your learning</p>
                 <div className="mt-8">
         
-                <Link href='/auth/register' className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]">Join for Free</Link>
+                <Link href={session?.user?"/courses":'/auth/register'} className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]" onClick={()=>setShowLoader(true)}>{session?.user ?"Enroll a new course": 'Join for Free'}</Link>
                 
                 </div>
               
@@ -70,13 +71,7 @@ export default function Home() {
       <section className="py-10  xs:px-6 lg:px-0">
         <div className="custom-container">
           <h2 className="font-semibold md:text-3xl xs:text-2xl text-center mb-4">Our popular courses</h2>
-          {/* <div className="flex items-center gap-5 justify-center mt-5 mb-8">
-            {
-              categories.map((c,i)=><button onClick={()=>setActiveCategory(c)} key={i} className={`${activeCategory===c?"activeCat":""} capitalize duration-300 hover:text-black hover:border-black text-gray-400  text-sm border-b-2 border-white pb-2`}>{c}</button>)
-            }
-            
-
-          </div> */}
+        
           {
               loadCourse &&
               <div className="flex justify-center items-center my-5 mb-9">

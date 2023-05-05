@@ -23,6 +23,9 @@ import Footer from "@/components/footer";
 
 
 export const getServerSideProps=async (context)=>{
+    const categories = await prisma.category.findMany({
+        where: {},
+      })
 
     const result=await prisma.user.findFirst({
         where:{
@@ -32,18 +35,19 @@ export const getServerSideProps=async (context)=>{
             createdCourses:{
               include:{
                 author:true,
-                lessons:true
+                lessons:true,
+                categories:true,
               }
             }
         }
     })
 
     return {
-        props: {courses:result.createdCourses.length!==0?JSON.parse(JSON.stringify(result?.createdCourses)):[]},
+        props: {categories: JSON.parse(JSON.stringify(categories)),courses:result.createdCourses.length!==0?JSON.parse(JSON.stringify(result?.createdCourses)):[]},
     }
 }
 
-function Course({courses}) {
+function Course({courses,categories}) {
 
   
     const [duration,setDuration]=useState()
@@ -54,7 +58,8 @@ function Course({courses}) {
     const [courseImage,setCourseImage]=useState()
     const [courseImageC,setCourseImageC]=useState()
     const {setShowLoader}=useContext(LoaderContext)
-    const {addToCart}=useContext(CartContext)
+    const [courseCategories,setCourseCatgories]=useState([])
+    const [courseCategoriesUp,setCourseCatgoriesUp]=useState([])
     const {setToast}=useContext(ToastContext)
     const router=useRouter()
     const { data: session } = useSession();
@@ -183,27 +188,41 @@ function Course({courses}) {
         }
       }
       const courseUpdate=async(e)=>{
-             
+             console.log(courseCategoriesUp);
         e.preventDefault();
         const {title,description,price}=e.target
-        console.log(e.target.title);
+
         try {
             setShowLoader(true)
             const formData=new FormData()
-            formData.set("courseImage", courseImage?courseImage:"");
+            if(courseImage) {
+                formData.set("courseImage", courseImage);
+            }
+         
             formData.append("title",title.value)
             formData.append("course_id",currentCourse.id)
             formData.append("description",description.value)
             formData.append("host",window.location.origin)
             formData.append("price",price.value)
+            formData.append("courseCats",JSON.stringify(courseCategoriesUp))
       
             const res= await axios.post(`/api/app/courses/update-course`, formData)
             console.log(res.data);
             if (res.data.success) {
                 console.log(res.data);
+               
+
+                setCourseModal(false)
+                
+                router.replace(router.asPath)
                 setShowLoader(false)
-                setToast('Course Updated','success')
-                router.replace(router.asPath);
+                setTimeout(() => {
+                    setToast('Course Updated','success')
+                }, 2000);
+             
+             
+          
+             
     
             }else{
                 setToast('Something is wrong with your input please try again','warning')
@@ -220,6 +239,7 @@ function Course({courses}) {
       const editCourse=(data)=>{
         setCourseModal(true)
         setCurrentCourse(data)
+        setCourseCatgoriesUp(data?.categoryIds || [])
       }
       const handleImage = (e,c) => {
 
@@ -251,8 +271,9 @@ function Course({courses}) {
         }
       }
       const createCourse = async (event) => {
-        
+       
         event.preventDefault();
+      
         const {title_c,description_c,price_c}=event.target
         console.log(event.target);
         try {
@@ -264,6 +285,7 @@ function Course({courses}) {
             formData.append("description",description_c.value)
             formData.append("host",window.location.origin)
             formData.append("price",price_c.value)
+            formData.append("courseCats",JSON.stringify(courseCategories))
       
             const res= await axios.post(`/api/app/courses/create-course`, formData)
             console.log(res.data);
@@ -396,7 +418,28 @@ function Course({courses}) {
                                                     <Image src={currentCourse.featuredImage} alt="course-img" className="rounded-lg w-full xs:h-[200px] object-cover" width={300} height={300}/>
                                                 </div>
                                             </div>
+                                            <div>
+                                                <p className="md:text-sm xs:text-xs my-2 mb-0">Course Category</p>
+
+                                                <div className="mb-2">
+                                                {currentCourse?.categories?.map(data=><span onClick={()=>{
+                                                    setCourseCatgoriesUp(prev=>prev.filter((datai)=>datai!==data.id));
+                                                    setToast("Category removed save your change","info")
+                                                }} className="capitalize mr-1 text-xs text-slate-400 cursor-pointer">{data.name},</span>)}
+                                                </div>
+                                                {
+                                                    categories.map((c)=><><input type="checkbox" className="mr-0.5"  value={c.id} onChange={(e)=>{
+                                                        if (e.target.checked) {
+                                                            setCourseCatgoriesUp(prev=>[...prev,e.target.value])
+                                                        }else{
+                                                            setCourseCatgoriesUp(prev=>prev.filter((data)=>data!==e.target.value))
+                                                        }
+                                                      
+                                                    }}/><span className="capitalize mr-3 text-xs">{c.name}</span></>)
+                                                }
+                                            </div>
                                         </div>
+                                     
                                     </div>
                                     
 
@@ -514,6 +557,20 @@ function Course({courses}) {
                                                 <div className="preview-box3 mt-9">
                                                    
                                                 </div>
+                                            </div>
+
+                                            <div>
+                                                <p className="md:text-sm xs:text-xs my-2">Course Category</p>
+                                                {
+                                                    categories.map((c)=><><input type="checkbox" className="mr-0.5" value={c.id} onChange={(e)=>{
+                                                        if (e.target.checked) {
+                                                            setCourseCatgories(prev=>[...prev,e.target.value])
+                                                        }else{
+                                                            setCourseCatgories(prev=>prev.filter((data)=>data!==e.target.value))
+                                                        }
+                                                      
+                                                    }}/><span className="capitalize mr-3 text-xs">{c.name}</span></>)
+                                                }
                                             </div>
                                         </div>
                                     </div>

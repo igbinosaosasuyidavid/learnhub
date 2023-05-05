@@ -69,7 +69,7 @@ export default function MenuCart() {
         </PopoverTrigger>
         <div className=''>
           <PopoverContent>
-              <div className='md:p-8 xs:p-4 h-full mt-5 text-center z-50 bg-white shadow-[0_0_20px_-10px_rgba(0,0,0,0.3)] rounded-lg xs:w-72 md:w-[400px]'>
+              <div className='md:p-8 xs:p-4 h-full mt-5 text-center z-50 bg-white shadow-[0_0_20px_-10px_rgba(0,0,0,0.3)] rounded-lg xs:w-72 md:w-[350px]'>
           
                 {cart.length!==0?
                   <>

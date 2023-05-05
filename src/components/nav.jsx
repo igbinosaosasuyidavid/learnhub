@@ -8,17 +8,19 @@ import { useRouter } from "next/router";
 import Image from "next/image";
 import {BiMenuAltRight} from "react-icons/bi"
 import {MdClose} from "react-icons/md"
-import { useState } from "react";
+import { useContext, useState } from "react";
+import LoaderContext from "@/contexts/loader";
 export default function Nav() {
   const { data: session } = useSession();
   const router=useRouter()
   const [toggle,setToggle] =useState(false)
+  const {setShowLoader} =useContext(LoaderContext)
 
     return (
       <nav className="py-4 xs:px-6  lg:px-0">
         <div className="custom-container ">
           <div className="flex items-center">
-            <div className="flex gap-3 items-center cursor-pointer md:w-2/6 xs:w-1/2 " onClick={(e)=>{e.preventDefault();router.push("/")}}>
+            <div className="flex gap-3 items-center cursor-pointer md:w-2/6 xs:w-1/2 " onClick={(e)=>{e.preventDefault();router.push("/");setShowLoader(true)}}>
                 <Image src="/logo.svg" alt="logo" className="md:w-10 md:h-10 xs:w-8 xs:h-8" width={200} height={200}/>
                 <h2 className="font-semibold text xs:text-xs md:text-[18px]">The Valley</h2>
             </div>
@@ -27,7 +29,7 @@ export default function Nav() {
               
               
               <li><Link href="/" >Home</Link></li>
-              <li><Link href="/">Courses</Link></li>
+              <li><Link href="/courses">Courses</Link></li>
               <li><Link href="/about">About</Link></li>
               <li><Link href="/contact">Contact</Link></li>
           </ul>

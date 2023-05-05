@@ -61,17 +61,22 @@ function Course({course,userIsStudent}) {
     const [currentLesson,showLesson]=useState(false)
     const [video,setVideo]=useState(false)
     const {setShowLoader}=useContext(LoaderContext)
-    const {addToCart}=useContext(CartContext)
+    const {cart,addToCart}=useContext(CartContext)
     const {setToast}=useContext(ToastContext)
 
 
 
    const checkOut= async (e)=>{
     e.preventDefault()
+    if(!session?.user) return router.push("/auth/login")
     try {
       setShowLoader(true)
       const stripe = await stripePromise;
-      const checkoutSession =  await axios.post('/api/app/stripe/payment-session',{cart:[course],user:session?.user})
+
+      addToCart(course,()=>{})
+      const checkoutSession =  await axios.post('/api/app/stripe/payment-session',{cart:cart,user:session?.user})
+      console.log(cart);
+
       const result = await stripe.redirectToCheckout({sessionId: checkoutSession.data.id});
 
       if (result.error) {
@@ -88,7 +93,7 @@ function Course({course,userIsStudent}) {
   }
     useEffect(()=>{
         setShowLoader(false)
-    })
+    },[])
   return (
     <>
         <Nav/>
@@ -96,18 +101,18 @@ function Course({course,userIsStudent}) {
         <div className="bg-[rgb(128,128,128,0.04)] py-6 xs:px-6  lg:px-0">
             <div className="custom-container">
                 <div className="md:flex items-center gap-6">
-                    <Image src={course.featuredImage} alt="course-Image"  className="md:h-72 md:w-1/2 xs:h-44 object-cover rounded-xl" width={500} height={500}/>
+                    <Image src={course?.featuredImage} alt="course-Image"  className="md:h-72 md:w-1/2 xs:h-44 object-cover rounded-xl" width={300} height={300}/>
                     <div className="md:w-1/2">
-                    <h2 className="text-black font-semibold md:text-2xl xs:text-xl mb-2 mt-4 md:mt-0">{course.title}</h2>
-                    <h2 className="xs:text-xs md:text-sm">{course.description?.length>200 ? course.description?.slice(0,200)+'...':course.description}</h2>
-                    <div className="flex items-center mt-3 mb-6"><FaUserFriends   className="mr-2 text-secondary text-sm md:text-lg"/> <span className="md:text-lg xs:text-sm text-black font-semibold mr-1">{course.studentIds?.length}</span> <span className="xs:text-sm">{course.studentIds?.length===1? 'Student':"Students"}</span></div>
+                    <h2 className="text-black font-semibold md:text-2xl xs:text-xl mb-2 mt-4 md:mt-0">{course?.title}</h2>
+                    <h2 className="xs:text-xs md:text-sm">{course?.description?.length>200 ? course?.description?.slice(0,200)+'...':course?.description}</h2>
+                    <div className="flex items-center mt-3 mb-6"><FaUserFriends   className="mr-2 text-secondary text-sm md:text-lg"/> <span className="md:text-lg xs:text-sm text-black font-semibold mr-1">{course?.studentIds?.length}</span> <span className="xs:text-sm">{course?.studentIds?.length===1? 'Student':"Students"}</span></div>
 
                     <h3 className="text-md text-black mb-2">Course Instructor</h3>
                     <div className="flex gap-2 items-center">
                         {
-                        session?.user?.profile?.img ? <Image src={session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center md:w-10 md:h-10 xs:w-8 xs:h-8 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase md:text-xl xs:text-sm">{course.author?.fullName.match(/\b(\w)/g).join('')}</div>
+                        session?.user?.profile?.img ? <Image src={session?.user?.profile?.Image} alt="profile-pic" width={200} height={200}/> : <div className="flex justify-center items-center md:w-10 md:h-10 xs:w-8 xs:h-8 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase md:text-xl xs:text-sm">{course?.author?.fullName.match(/\b(\w)/g).join('')}</div>
                         }
-                        <h3 className=""><span className="text-black font-medium md:text-sm xs:text-[13px]">{course.author?.fullName}</span><span className="md:text-xs xs:text-[9px] m-0 p-0 !text-primary flex items-center gap-1"><BsStar/> Experienced</span></h3>
+                        <h3 className=""><span className="text-black font-medium md:text-sm xs:text-[13px]">{course?.author?.fullName}</span><span className="md:text-xs xs:text-[9px] m-0 p-0 !text-primary flex items-center gap-1"><BsStar/> Experienced</span></h3>
                     
                     </div>
                 </div>
@@ -178,7 +183,7 @@ function Course({course,userIsStudent}) {
 
                                     
                                     })}}>Add to Cart</button>
-                                <button className="bg-transparent text-black p-3 w-full border border-gray-500 rounded-lg hover:bg-gray-100 duration-300 focus:border-gray-500 font-semibold xs:text-xs md:text-sm"  onClick={checkOut} >Purchase Now</button>
+                                <button className="bg-transparent text-black p-3 w-full active:border focus:border border border-gray-500 rounded-lg hover:bg-gray-100 duration-300 focus:border-gray-500 active:border-gray-500 font-semibold xs:text-xs md:text-sm"  onClick={checkOut} >Purchase Now</button>
                             </>
                         }
                         

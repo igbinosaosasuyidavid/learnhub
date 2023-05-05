@@ -29,7 +29,7 @@ export default function Home() {
   useEffect(()=>{
     getCourses()
     setShowLoader(false)
-  },[courses])
+  },[courses,setShowLoader])
 
   const getCourses= async ()=>{
     try {
@@ -82,7 +82,7 @@ export default function Home() {
           <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-5 xs:grid-cols-2">
            
             {
-              courses.slice(0,8).map((data)=>{
+              courses.slice(0,8).filter(data=>!data.studentIds.includes(session?.id)).map((data)=>{
                 return (
                   <div  className="shadow-lg border border-solid border-gray-500 " key={data.id}>
                       <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover sm:h-[150px] xs:h-[100px] cursor-pointer" width={300} height={300} onClick={()=>{

@@ -5,7 +5,7 @@ async function handler(req, res) {
   if (req.method?.toUpperCase() === "POST") {
     try {
       await prisma.$connect()
-      const { email, password, fullName } = req.body;
+      const { email, password, fullName, creator } = req.body;
       let users=await prisma.user.findMany()
    
       // check if user exists
@@ -28,6 +28,7 @@ async function handler(req, res) {
           email,
           hash,
           fullName,
+          admin:creator==="true"?true:false
         },
       });
       const cleanedUser = { ...user, hash: null };

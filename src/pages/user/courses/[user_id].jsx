@@ -19,37 +19,60 @@ import { useSession } from "next-auth/react";
 import { FaTimes } from "react-icons/fa";
 import Image from "next/image";
 import Footer from "@/components/footer";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/pages/api/auth/[...nextauth]";
+import Link from "next/link";
+import { BiTrash } from "react-icons/bi";
 
 
 
-export const getServerSideProps=async (context)=>{
+export const getServerSideProps=async ({ req, res ,params})=>{
+    const session= await getServerSession(req, res, authOptions)
+   
+  
     const categories = await prisma.category.findMany({
         where: {},
       })
-
-    const result=await prisma.user.findFirst({
-        where:{
-            id:context.params.user_id
-        },
-        select:{
+      var type;
+    if ( session?.user?.admin) {
+        type={
             createdCourses:{
               include:{
                 author:true,
                 lessons:true,
                 categories:true,
+                students:true,
               }
             }
         }
+   
+    }else{
+        type={
+            enrolledCourses:{
+              include:{
+                author:true,
+                lessons:true,
+                categories:true,
+                students:true,
+              }
+            }
+        }
+   
+    }
+    const result=await prisma.user.findFirst({
+        where:{
+            id:params.user_id
+        },
+        select:type
     })
 
+    var carr=result.enrolledCourses || result.createdCourses
     return {
-        props: {categories: JSON.parse(JSON.stringify(categories)),courses:result.createdCourses.length!==0?JSON.parse(JSON.stringify(result?.createdCourses)):[]},
+        props: {categories: JSON.parse(JSON.stringify(categories)),courses:carr.length!==0?JSON.parse(JSON.stringify(carr)):[],isAdmin:session?.user?.admin},
     }
 }
 
-function Course({courses,categories}) {
-
-  
+function Course({courses,categories,isAdmin}) {
     const [duration,setDuration]=useState()
     const [courseModal,setCourseModal]=useState(false)
     const [createModal,setCreateModal]=useState(false)
@@ -65,7 +88,8 @@ function Course({courses,categories}) {
     const { data: session } = useSession();
     useEffect(()=>{
         setShowLoader(false)
-    })
+        console.log(session);
+    },[session])
     const handleChange = (e) => {
 
         const file = e.target.files[0]
@@ -188,8 +212,14 @@ function Course({courses,categories}) {
         }
       }
       const courseUpdate=async(e)=>{
-             console.log(courseCategoriesUp);
         e.preventDefault();
+        if(session?.id !== currentCourse.authorId) {
+            router.push('/')
+           
+            return null
+        
+        }
+        
         const {title,description,price}=e.target
 
         try {
@@ -209,16 +239,12 @@ function Course({courses,categories}) {
             const res= await axios.post(`/api/app/courses/update-course`, formData)
             console.log(res.data);
             if (res.data.success) {
-                console.log(res.data);
+    
                
-
-                setCourseModal(false)
-                
-                router.replace(router.asPath)
+                setCurrentCourse(res.data.course)
                 setShowLoader(false)
-                setTimeout(() => {
-                    setToast('Course Updated','success')
-                }, 2000);
+                setToast('Course Updated','success')
+         
              
              
           
@@ -308,6 +334,17 @@ function Course({courses,categories}) {
             }
         }
     };
+    const removeStudent=async (student_id)=>{
+        setShowLoader(true)
+        try {
+            const res= await axios.post(`/api/app/courses/remove-students`, {student_id,course_id:currentCourse.id})
+            setCurrentCourse(res.data.course)
+            setShowLoader(false)
+            setToast('Student removed','success')
+        } catch (e) {
+            console.log(e);
+        }
+    }
     
   return (
     <>
@@ -317,10 +354,14 @@ function Course({courses,categories}) {
                 !courseModal &&
                 <div className="border-t border-gray-200 xs:px-6 lg:px-0">
                     <div className="custom-container ">
-                        <h3 className="md:text-4xl xs:text-2xl text-center mt-10 mb-4">My courses</h3>
-                        <div className="flex justify-end mb-7">
-                            <button className="ml-auto bg-secondary text-white p-2 xs:py-1 rounded-lg inline-flex gap-1 items-center duration-300 hover:opacity-90 md:text-sm xs:text-xs" onClick={(e)=>{e.preventDefault();setCreateModal(true)}}><MdAdd size={25}/> New Course</button>
-                        </div>
+                        <h3 className="md:text-4xl xs:text-2xl text-center mt-10 mb-4"> {isAdmin ? "My" :"Enrolled"} courses</h3>
+
+                        { isAdmin &&
+                            <div className="flex justify-end mb-7">
+                                <button className="ml-auto bg-secondary text-white p-2 xs:py-1 rounded-lg inline-flex gap-1 items-center duration-300 hover:opacity-90 md:text-sm xs:text-xs" onClick={(e)=>{e.preventDefault();setCreateModal(true)}}><MdAdd size={25}/> New Course</button>
+                            </div>
+                        }
+                        
                     
                 
                         {
@@ -348,11 +389,18 @@ function Course({courses,categories}) {
                                             "/courses/"+data.id
                                             );
                                         }}>{data.title.length>50?data.title.slice(0,50)+'...':data.title}</h3>
-                                         
+                                            {
+                                                isAdmin ?
                                             <h3 className="font-bold sm:text-lg xs:text-[13px] flex items-center pb-3 z-50 mt-2">
                                                 <span>{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(data.price).toFixed(3))}</span>
                                                 <button className="flex items-center gap-1 border bg-secondary text-white hover:opacity-90 duration-300 sm:py-1 sm:px-2 xs:py-1 xs:px-1 text-[11px] rounded-md ml-auto" onClick={()=>editCourse(data)}> <FiEdit size={15} /> <span className="xs:hidden md:inline">Edit</span></button>
+                                             
                                             </h3>
+                                            :    <button className="border bg-secondary text-white hover:opacity-90 duration-300 sm:py-1 sm:px-2 xs:py-1 xs:px-1 text-[11px] rounded-md ml-auto mt-7" onClick={()=>{setShowLoader(true);router.push(
+                                                { pathname: `/courses/${data.id}`},
+                                                "/courses/"+data.id
+                                                )}}>Continue Course</button> 
+                                            }
                                     
                             
                             
@@ -368,7 +416,12 @@ function Course({courses,categories}) {
                           
                             </>
                             :
-                            <p className="text-center my-7 w-full xs:text-xs md:text-sm !min-h-screen mt-14">You don&apos;t have any course yet</p>
+                            <div className="text-center !min-h-screen">
+                                <p className="my-7 w-full xs:text-xs md:text-sm mt-14">You don&apos;t have any course yet</p>
+
+                                <Link href="/courses" onClick={()=>{setShowLoader(true)}} className="bg-secondary py-2 px-4 rounded-lg text-white  hover:opacity-90 duration-300">Browse Courses</Link>
+                            </div>
+                          
 
                         }
                     
@@ -425,17 +478,17 @@ function Course({courses,categories}) {
                                                 {currentCourse?.categories?.map(data=><span onClick={()=>{
                                                     setCourseCatgoriesUp(prev=>prev.filter((datai)=>datai!==data.id));
                                                     setToast("Category removed save your change","info")
-                                                }} className="capitalize mr-1 text-xs text-slate-400 cursor-pointer">{data.name},</span>)}
+                                                }} className="capitalize mr-1 text-xs text-slate-400 cursor-pointer" key={data.id}>{data.name},</span>)}
                                                 </div>
                                                 {
-                                                    categories.map((c)=><><input type="checkbox" className="mr-0.5"  value={c.id} onChange={(e)=>{
+                                                    categories.map((c)=><span key={c.id}><input type="checkbox" className="mr-0.5"  value={c.id} onChange={(e)=>{
                                                         if (e.target.checked) {
                                                             setCourseCatgoriesUp(prev=>[...prev,e.target.value])
                                                         }else{
                                                             setCourseCatgoriesUp(prev=>prev.filter((data)=>data!==e.target.value))
                                                         }
                                                       
-                                                    }}/><span className="capitalize mr-3 text-xs">{c.name}</span></>)
+                                                    }}/><span className="capitalize mr-3 text-xs">{c.name}</span></span>)
                                                 }
                                             </div>
                                         </div>
@@ -507,7 +560,28 @@ function Course({courses,categories}) {
                                 
                                 </div>
                             </div>
-                        
+                            <h3 className="text-xl font-medium mb-1 mt-14">Course Students</h3>
+                            <div className="md:flex gap-9 md:mt-7">
+                                <div className="md:w-3/5 xs:mb-14">
+                                
+                                    {
+                                        currentCourse.students.length!==0? <>
+                                        {
+                                                currentCourse.students.map((data,i)=>
+                                                <div className="flex gap-2 border-b border-t py-2 border-gray-100" key={data.id}>
+                                                    <p className="xs:text-xs md:text-xs">{i+1})</p>
+                                                    <h1 className="xs:text-xs md:text-xs">{data.fullName}</h1>
+                                                    <p className="ml-auto hover:text-red-500 duration-300 cursor-pointer" onClick={()=>removeStudent(data.id)}><BiTrash/></p>
+                                                   
+                                                </div>
+                                                )
+                                        }
+                                            
+                                        </>:<p className="!min-h-fit text-sm">No Students for this course</p>
+                                    }
+                                </div>
+                            
+                            </div>
                             
                         </div>
                     </div>

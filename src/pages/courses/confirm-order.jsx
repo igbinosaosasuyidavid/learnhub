@@ -11,14 +11,14 @@ import Link from 'next/link';
 
 export default function ConfirmOrder() {
     const router=useRouter()
-    const {cart}=useContext(CartContext)
+    const {cart,setCart}=useContext(CartContext)
     const {setToast}=useContext(ToastContext)
     const [failed,setFailed]=useState(false)
     useEffect(() => {
-        console.log(cart,'------------');
+     
         checkOrder()
        
-      }, [cart,checkOrder]);
+      },[cart]);
     async function checkOrder() {
         const query = new URLSearchParams(window.location.search);
         if (query.get('payment')==="true") {
@@ -29,7 +29,8 @@ export default function ConfirmOrder() {
                 if (res.data.success) {
                     setToast("Payment Successful. You are now enrolled into all courses paid for","success")
                     setTimeout(() => {
-                        router.push("/user/order-history")
+                        setCart(()=>[])
+                        router.push("/")
                     }, 3000);
                     
                     
@@ -53,11 +54,14 @@ export default function ConfirmOrder() {
         {
             failed?
             <div className='flex h-screen w-full justify-center items-center'>
-                <div className='h-full w-full'>
-                    <Image src="/logo.svg" alt="" className='text-center !inline' width={100} height={100}/>
-                    <h1 className='text-center h-full mt-9 xs:text-sm md:text-lg'>Sorry we coudn&apos;t receive your payment please try checking out again</h1>
+                <div className='h-screen flex items-center justify-center w-full'>
+                    <div className='text-center'>
+                        <Image src="/logo.svg" alt="" className='text-center !inline' width={100} height={100}/>
+                        <h1 className='text-center mt-9 xs:text-sm md:text-lg'>Sorry we coudn&apos;t receive your payment please try checking out again</h1>
 
-                    <Link href={"/"} className='mt-6 xs:text-xs md:text-sm' >Back to Home</Link>
+                        <Link href={"/"} className='mt-8 inline-block text-white xs:text-xs md:text-sm  bg-secondary py-1.5 px-4' >Back to Home</Link>
+                    </div>
+                  
                 </div>
               
             </div>

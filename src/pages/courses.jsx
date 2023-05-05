@@ -9,6 +9,8 @@ import { FaUserTie } from "react-icons/fa";
 import { BsCart3 } from "react-icons/bs";
 import ToastContext from "@/contexts/toast";
 import CartContext from "@/contexts/cart";
+import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 export const getServerSideProps=async (context)=>{
     const categories = await prisma.category.findMany({
         where: {},
@@ -25,6 +27,8 @@ function Courses(props) {
     const [loadCourse,setLoadCourse]=useState(true)
     const {addToCart}=useContext(CartContext)
     const {setToast}=useContext(ToastContext)
+    const router=useRouter()
+    const {data:session}=useSession()
     const getCourseByCategory= async (category_id)=>{
 
         setLoadCourse(true)
@@ -40,7 +44,7 @@ function Courses(props) {
         setShowLoader(false)
         setActiveCategory("all categories")
         getCourseByCategory()
-    },[])
+    },[setShowLoader])
   return (
     <>
         <Nav/>
@@ -83,7 +87,7 @@ function Courses(props) {
                         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-5 xs:grid-cols-2 mb-8">
            
                         {
-                            courses.map((data)=>{
+                            courses.filter(data=>!data.studentIds.includes(session?.id)).map((data)=>{
                             return (
                                 <div  className="shadow-lg border border-solid border-gray-500 " key={data.id}>
                                     <Image src={data.featuredImage} alt="course-Image" className="w-full object-cover sm:h-[150px] xs:h-[100px] cursor-pointer" width={300} height={300} onClick={()=>{

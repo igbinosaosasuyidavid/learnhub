@@ -49,7 +49,7 @@ function Login() {
       <div className="h-full m-auto w-full">
         <div className="flex m-auto items-center justify-center h-full md:w-[400px] xs:w-full">
           <div className="text-center w-full">
-            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 md:h-28 md:w-28 xs:h-24 xs:w-24' width={200} height={200}/>
+            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 md:h-28 md:w-28 xs:h-24 xs:w-24 cursor-pointer' width={200} height={200} onClick={()=>{router.push('/')}}/>
             
             <h1 className="text-left text-white md:text-2xl xs:text-xl mb-3  mt-7">Welcome back!</h1>
             <form onSubmit={loginUser}>

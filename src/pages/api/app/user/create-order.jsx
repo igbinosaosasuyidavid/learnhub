@@ -8,7 +8,7 @@ export default async function handler(req, res) {
         var session =await getServerSession(req,res,authOptions)
     
         await prisma.$connect()
-
+      console.log(req.body.cart);
         const order=await prisma.order.create({
           data:{
               userId:session.id,

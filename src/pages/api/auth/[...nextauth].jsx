@@ -31,6 +31,7 @@ export const authOptions = {
           }
 
           // compare password
+
           const isPassMatch = await bcrypt.compare(password, user.hash);
           if (!isPassMatch) {
             return null;
@@ -40,6 +41,7 @@ export const authOptions = {
           return {
             name: user.fullName,
             email: user.email,
+            admin:user.admin,
             id: user.id,
           };
         } catch (error) {
@@ -53,12 +55,16 @@ export const authOptions = {
     jwt: async ({ token, user }) => {
       if (user) {
         token.id = user.id;
+        token.admin = user.admin;
       }
       return token;
     },
     session: ({ session, token }) => {
       if (token) {
         session.id = token.id;
+        session.user.admin = token.admin;
+     
+      
       }
       return session;
     },

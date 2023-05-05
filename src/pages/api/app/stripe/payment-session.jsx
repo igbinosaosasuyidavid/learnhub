@@ -18,11 +18,11 @@ export default async function handler(req, res) {
       console.log(transformedItems);
     try {
       // Create Checkout Sessions from body params.
- 
+  
       const session = await stripe.checkout.sessions.create({
         line_items: transformedItems,
         mode: 'payment',
-        customer_email:req.body.user.email,
+        ...(req.body.user?.email && { customer_email:req.body.user?.email }),
         success_url: `${req.headers.origin}/courses/confirm-order?payment=true&session_id={CHECKOUT_SESSION_ID}`,
         cancel_url: `${req.headers.origin}/courses/confirm-order?payment=false`,
       });

@@ -12,26 +12,39 @@ datasource db {
 }
 
 model User {
-  id              String   @id @default(auto()) @map("_id") @db.ObjectId
-  email           String   @unique
+  id              String     @id @default(auto()) @map("_id") @db.ObjectId
+  email           String     @unique
   hash            String
-  admin           Boolean  @default(false)
+  admin           Boolean    @default(false)
   fullName        String
-  createdAt       DateTime @default(now())
-  updatedAt       DateTime @updatedAt
+  createdAt       DateTime   @default(now())
+  updatedAt       DateTime   @updatedAt
   bio             String?
   pic             String?
-  enrolledCourses Course[] @relation("enrolledCourses", fields: [courseIds], references: [id])
-  courseIds       String[] @db.ObjectId
+  enrolledCourses Course[]   @relation("enrolledCourses", fields: [courseIds], references: [id])
+  courseIds       String[]   @db.ObjectId
   createdCourses  Course[]
   orders          Order[]
-  role            Role     @default(STUDENT)
+  role            Role       @default(STUDENT)
+  Wishlist        Wishlist[]
 }
 
 enum Role {
   STUDENT
   ADMIN
   TUTOR
+}
+
+model Wishlist {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  courseId String @db.ObjectId
+  course   Course @relation(fields: [courseId], references: [id])
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
 }
 
 model Order {
@@ -62,13 +75,14 @@ model Course {
   updatedAt     DateTime   @updatedAt
   students      User[]     @relation("enrolledCourses", fields: [studentIds], references: [id])
   studentIds    String[]   @db.ObjectId
+  wishlist      Wishlist[]
 }
 
 model Lesson {
   id        String   @id @default(auto()) @map("_id") @db.ObjectId
-  title String 
+  title     String
   video_url String
-  duration String
+  duration  String
   materials String[]
   course    Course   @relation(fields: [courseId], references: [id])
   courseId  String   @db.ObjectId

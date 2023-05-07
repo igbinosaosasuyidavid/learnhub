@@ -86,13 +86,17 @@ export default function Dashboard() {
           setCourses(result.data.data);
 
           // set chart data
-        //   res.forEach((item) => {
-        //     earnings.push(item.earnings);
-        //     dates.push(moment(item.createdAt).format("YYYY-MM-DD"));
-        //   });
+          //   res.forEach((item) => {
+          //     earnings.push(item.earnings);
+          //     dates.push(moment(item.createdAt).format("YYYY-MM-DD"));
+          //   });
 
-        const aggr = result.data.data.reduce((acc, course) => acc.concat(course.students.map(student => student.createdAt)), []);
-        console.log(aggr);
+          const aggr = result.data.data.reduce(
+            (acc, course) =>
+              acc.concat(course.students.map((student) => student.createdAt)),
+            []
+          );
+          console.log(aggr);
         } else {
           console.log(result);
         }
@@ -111,10 +115,10 @@ export default function Dashboard() {
     <>
       <Nav />
       <section>
-        <div className="custom-container">
+        <div className="custom-container px-4">
           <h1 className="my-5 text-2xl font-semibold">Dashboard</h1>
 
-          <article className="grid grid-cols-4 gap-4 mb-5">
+          <article className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-5">
             <div className="shadow-sm shadow-zinc-300 px-3 py-4 rounded text-center">
               <AcademicCapIcon
                 width={40}
@@ -158,7 +162,9 @@ export default function Dashboard() {
             </div>
             <div className="shadow-sm shadow-zinc-300 px-3 py-4 rounded text-center">
               <HeartIcon width={40} className="mx-auto text-zinc-500 mb-1" />
-              <h2 className="text-3xl font-semibold text-zinc-500">2</h2>
+              <h2 className="text-3xl font-semibold text-zinc-500">
+                {courses.reduce((acc, cur) => acc + cur.wishlist, 0)}
+              </h2>
               <p>Number of wishes</p>
             </div>
           </article>

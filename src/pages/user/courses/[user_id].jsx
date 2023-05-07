@@ -357,7 +357,7 @@ function Course({courses,categories,isAdmin}) {
                                             {
                                                 isAdmin ?
                                             <h3 className="font-bold sm:text-lg xs:text-[13px] flex items-center pb-3 z-50 mt-2">
-                                                <span>{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(data.price).toFixed(3))}</span>
+                                                <span>{new Intl.NumberFormat("en-US",{ style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0,}).format(parseFloat(data.price).toFixed(3))}</span>
                                                 <button className="flex items-center gap-1 border bg-secondary text-white hover:opacity-90 duration-300 sm:py-1 sm:px-2 xs:py-1 xs:px-1 text-[11px] rounded-md ml-auto" onClick={()=>editCourse(data)}> <FiEdit size={15} /> <span className="xs:hidden md:inline">Edit</span></button>
                                              
                                             </h3>

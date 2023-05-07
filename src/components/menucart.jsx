@@ -100,7 +100,7 @@ export default function MenuCart() {
                     <p className='text-xl text-black font-bold md:text-xl xs:text-[15px]'> {new Intl.NumberFormat("en-US", { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(cartTotal).toFixed(3))}</p>
                   </div>
                   <div className='flex justify-center items-center gap-3 mt-3'>
-                    <button className='checkout bg-primary hover:opacity-90 duration-300 text-white md:p-2  xs:p-1 md:px-4 xs:px-2 md:text-xs xs:text-[9px] rounded-md'><a href="" onClick={checkOut}>Checkout</a></button>
+                    <button onClick={checkOut} className='checkout bg-primary hover:opacity-90 duration-300 text-white md:p-2  xs:p-1 md:px-4 xs:px-2 md:text-xs xs:text-[9px] rounded-md'> Checkout</button>
                     <button onClick={(e) => {
                       e.preventDefault();
                       router.push('/user/cart')

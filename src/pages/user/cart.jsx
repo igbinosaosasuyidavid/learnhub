@@ -9,12 +9,14 @@ import { BsDot } from "react-icons/bs";
 import { loadStripe } from '@stripe/stripe-js';
 import { FaTimes } from "react-icons/fa";
 import axios from "axios";
+import ToastContext from "@/contexts/toast";
 const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
     );
 export default function Profile() {
     const { cart, removeCart } = useContext(CartContext)
     const {setShowLoader } = useContext(LoaderContext)
+    const {setToast } = useContext(ToastContext)
     const [cartTotal, setCartTotal] = useState(0)
     const {data:session}=useSession()
     useEffect(() => {
@@ -25,6 +27,7 @@ export default function Profile() {
     }, [cart])
 
     const checkOut = async (e) => {
+      
         e.preventDefault()
         if (!session?.user) {
             router.push("/auth/login")
@@ -77,7 +80,7 @@ export default function Profile() {
                                                             <Image src={data.featuredImage} alt="" className='w-2/6 h-28 object-cover rounded-md' width={200} height={200} />
                                                             <div className="w-4/6">
                                                                 <p className='md:text-lg xs:text-[15px]  text-left '>{data.title}</p>
-                                                                <p className="flex items-center sm:text-sm xs:text-[12px] gap-1 mb-3 mt-1 text-gray-500">By {data.author.fullName} <BsDot color="black" size={20}/>{data.lessons.length} lessons</p>
+                                                                <p className="flex items-center sm:text-sm xs:text-[12px] gap-1 mb-3 mt-1 text-gray-500">By {data.author.fullName} <BsDot color="black" size={20}/>{data.lessons?.length} lessons</p>
                                                                 <h3 className='text-black text-left md:text-[18px] xs:text-[17px] font-semibold mt-1.5 flex items-center'><span>{new Intl.NumberFormat("en-US", { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(data.price).toFixed(3))}</span><span className='text-xs text-red-400 cursor-pointer ml-auto' onClick={() => removeCart(data.id)}><FaTimes /></span></h3>
                                                             </div>
 
@@ -95,7 +98,7 @@ export default function Profile() {
                                         </div>
                                         
                                         <span className="font-normal !text-sm ml-auto mb-6 inline-block">14 days refund policy</span>
-                                        <button className='w-full checkout bg-primary hover:opacity-90 duration-300 text-white md:p-4  xs:p-2 md:px-4 xs:px-2 md:text-lg xs:text-[15px] rounded-md'><a href="" onClick={checkOut}>Checkout</a></button>
+                                        <button onClick={checkOut} className='w-full checkout bg-primary hover:opacity-90 duration-300 text-white md:p-4  xs:p-2 md:px-4 xs:px-2 md:text-lg xs:text-[15px] rounded-md'>Checkout</button>
                                     </div>
                                 </div>
                              

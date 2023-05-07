@@ -13,10 +13,11 @@ import {
     useDisclosure,
 } from '@chakra-ui/react'
 import { signOut } from 'next-auth/react'
-import { BsBookmarkStar, BsBook } from 'react-icons/bs'
+import { BsBookmarkStar, BsBook, BsPencilSquare } from 'react-icons/bs'
 import { useRouter } from 'next/router'
 import Image from 'next/image'
 import LoaderContext from '@/contexts/loader'
+import { MdDashboard } from 'react-icons/md'
 
 export default function UserProfile(props) {
     const { isOpen, onOpen, onClose } = useDisclosure()
@@ -28,7 +29,7 @@ export default function UserProfile(props) {
         <>
             <a className='cursor-pointer' ref={btnRef} onClick={onOpen}>
                 {
-                    props.session?.user?.profile?.Image ? <Image src={props.session?.user?.profile?.Image} alt="profile-pic" width={200} height={200} /> : <div className="flex justify-center items-center xs:h-9 xs:w-9 xs:text-sm md:w-12 md:h-12 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase lg:text-xl">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
+                    props.session?.user?.pic ? <Image src={props.session?.user?.pic} alt="profile-pic" width={200} height={200} className='rounded-full ml-2  w-11 h-11 object-cover'/> : <div className="ml-2 flex justify-center items-center xs:h-9 xs:w-9 xs:text-sm md:w-12 md:h-12 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase lg:text-xl">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
                 }
             </a>
 
@@ -46,7 +47,7 @@ export default function UserProfile(props) {
 
                             <div className=''>
                                 {
-                                    props.session?.user?.profile?.Image ? <Image src={props.session?.user?.profile?.Image} alt="profile-pic" width={200} height={200} /> : <div className="flex justify-center items-center w-16 h-16 rounded-full  bg-[rgb(225,225,225,0.4)] text-white font-semibold uppercase text-3xl ">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
+                                    props.session?.user?.pic ? <Image src={props.session?.user?.pic} alt="profile-pic" className='rounded-full  w-16 h-16 object-cover' width={200} height={200} /> : <div className="flex justify-center items-center w-16 h-16 rounded-full  bg-[rgb(225,225,225,0.4)] text-white font-semibold uppercase text-3xl ">{props.session?.user?.name.match(/\b(\w)/g).join('')}</div>
                                 }
                                 <div>
                                     <p className='text-md capitalize text-white'>{props.session?.user.name}</p>
@@ -74,20 +75,33 @@ export default function UserProfile(props) {
                                 <BsBookmarkStar size={20} className='text-gray-700' />
                                 <h2 className='text-black font-semibold text-[14px]'>My Courses</h2>
                             </div>
-                            { props.session?.user?.admin &&
-                                 <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={
-                                    (e) => {
-                                        e.preventDefault();
-                                        setShowLoader(true);
-                                        router.push(`/courses/create`)
-                                    }
-                                }>
-                                    <BsBook size={20} className='text-gray-700' />
-                                    <h2 className='text-black font-semibold text-[14px]'>Create Course</h2>
-                                </div>
+                            {props.session?.user?.admin &&
+                                <>
+                                    <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={
+                                        (e) => {
+                                            e.preventDefault();
+                                            setShowLoader(true);
+                                            router.push(`/courses/create`)
+                                        }
+                                    }>
+                                        <BsPencilSquare size={20} className='text-gray-700' />
+                                        <h2 className='text-black font-semibold text-[14px]'>Create Course</h2>
+                                    </div>
+                                    <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={
+                                        (e) => {
+                                            e.preventDefault();
+                                            setShowLoader(true);
+                                            router.push(`/user/creator-dashboard`)
+                                        }
+                                    }>
+                                        <MdDashboard size={20} className='text-gray-700' />
+                                        <h2 className='text-black font-semibold text-[14px]'>Dashboard</h2>
+                                    </div>
+                                </>
+
                             }
-                            { !props.session?.user?.admin &&
-                                 <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={
+                            {!props.session?.user?.admin &&
+                                <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={
                                     (e) => {
                                         e.preventDefault();
                                         setShowLoader(true);
@@ -98,7 +112,7 @@ export default function UserProfile(props) {
                                     <h2 className='text-black font-semibold text-[14px]'>Wishlist</h2>
                                 </div>
                             }
-                           
+
                         </div>
                     </DrawerBody>
 

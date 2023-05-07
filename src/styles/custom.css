@@ -67,7 +67,9 @@ button:focus{
 .custom-hover:hover > h2{
   color:#2e6b43;
 }
-
+.cam-hov:hover >div{
+  visibility: visible !important;
+}
 
   /* chakra-popover__popper css-1qq679y{
 

@@ -42,6 +42,7 @@ export const authOptions = {
             name: user.fullName,
             email: user.email,
             admin:user.admin,
+            pic:user.pic,
             id: user.id,
           };
         } catch (error) {
@@ -52,10 +53,15 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, user }) => {
+    jwt: async ({ token, user,trigger,session }) => {
+      
       if (user) {
         token.id = user.id;
         token.admin = user.admin;
+        token.pic = user.pic;
+      }
+      if (trigger === "update" && session?.pic) {
+        token.pic = session?.pic
       }
       return token;
     },
@@ -63,6 +69,7 @@ export const authOptions = {
       if (token) {
         session.id = token.id;
         session.user.admin = token.admin;
+        session.user.pic = token.pic;
      
       
       }

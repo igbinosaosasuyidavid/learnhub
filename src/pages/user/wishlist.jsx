@@ -82,7 +82,7 @@ function Wishlist() {
                       <span>
                         {new Intl.NumberFormat("en-US", {
                           style: "currency",
-                          currency: "USD",
+                          currency: "GBP",
                           currencyDisplay: "narrowSymbol",
                           minimumFractionDigits: 0,
                         }).format(parseFloat(data.price).toFixed(3))}

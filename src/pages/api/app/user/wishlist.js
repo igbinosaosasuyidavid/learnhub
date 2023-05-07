@@ -37,7 +37,7 @@ export default async function handler(req, res) {
         course: {
           include: {
             author: true,
-            lessons:true,
+            lessons: true,
           }
         }
       }

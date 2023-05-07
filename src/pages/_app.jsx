@@ -5,15 +5,15 @@ import "@/styles/custom.css"
 import "@/styles/loader.css"
 import { SessionProvider } from "next-auth/react"
 
-import { ChakraProvider} from '@chakra-ui/react'
-import {CartProvider} from '@/contexts/cart'
+import { ChakraProvider } from '@chakra-ui/react'
+import { CartProvider } from '@/contexts/cart'
 import { LoaderProvider } from '@/contexts/loader'
 import Loader from '@/components/loader'
 import Toast from '@/components/toast'
 import { ToastProvider } from '@/contexts/toast'
 
 // If loading a variable font, you don't need to specify the font weight
-const poppins = Poppins({ weight:['100','200','300','400','500','600','700'],subsets: ['latin'] })
+const poppins = Poppins({ weight: ['100', '200', '300', '400', '500', '600', '700'], subsets: ['latin'] })
 
 export default function App({
   Component,
@@ -23,19 +23,19 @@ export default function App({
 
     <SessionProvider session={session}>
       <LoaderProvider>
-      <ToastProvider>
-        <CartProvider>
-          <ChakraProvider>
-            <main className={poppins.className}>
-              <Loader/>
-              <Toast/>
-              <Component {...pageProps} />
-            </main>
-          </ChakraProvider>
-        </CartProvider>
+        <ToastProvider>
+          <CartProvider>
+            <ChakraProvider>
+              <main className={poppins.className}>
+                <Loader />
+                <Toast />
+                <Component {...pageProps} />
+              </main>
+            </ChakraProvider>
+          </CartProvider>
         </ToastProvider>
       </LoaderProvider>
     </SessionProvider>
-  
+
   )
 }

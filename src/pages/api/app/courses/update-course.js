@@ -19,7 +19,7 @@
 //         }
 //       });
 //       form.parse(req, async (err, fields, files) => {
-    
+
 //         if (err) {
 //           return res.json({ err });
 //         }
@@ -46,19 +46,19 @@
 //               featuredImage:files.courseImage?fields.host+'/images/'+files.courseImage.newFilename :updatedcourse.featuredImage,
 //             },
 //           });
-        
+
 //         return res.status(200).json({course,success:true})
-      
-       
+
+
 //       });
-     
-    
+
+
 
 //       } catch (err) {
 //         console.log(err);
 //         return res.status(500).send("Sorry an error occured on the server");
 //       }
-    
+
 
 //   }
 
@@ -94,81 +94,81 @@ export default async function handler(req, res) {
   await runMiddleware(req, res, uploadMiddleware);
 
   const dcd = await prisma.course.update({
-    where:{
-      id:req.body.course_id
+    where: {
+      id: req.body.course_id
     },
-    data:{
-      categories:{
-        set:[]
+    data: {
+      categories: {
+        set: []
       }
     }
   })
- 
+
   if (req.file) {
     const stream = await cloudinary.uploader.upload_stream(
       {
         folder: "courseFeatured",
       },
-       async (error, result) => {
+      async (error, result) => {
         console.log(result);
         if (error) return res.status(500).send("Sorry an error occured on the server");
         const checkCourse = await prisma.course.findFirst({
-            where:{
-              id:req.body.course_id
+          where: {
+            id: req.body.course_id
           },
         })
-        cloudinary.uploader.destroy('courseFeatured/'+checkCourse.featuredImage.split(/[./]/)[10],async (err,resp)=>{
-          if(err) console.log(err);
+        cloudinary.uploader.destroy('courseFeatured/' + checkCourse.featuredImage.split(/[./]/)[10], async (err, resp) => {
+          if (err) console.log(err);
           const course = await prisma.course.update({
-            where:{
-                id:req.body.course_id
+            where: {
+              id: req.body.course_id
             },
             data: {
-              title:req.body.title,
-              description:req.body.description,
-              price:parseFloat(req.body.price),
-              featuredImage:result.secure_url,
-              categories:{
-                connect:JSON.parse(req.body.courseCats).map(data=>({id:data}))
+              title: req.body.title,
+              description: req.body.description,
+              price: parseFloat(req.body.price),
+              featuredImage: result.secure_url,
+              categories: {
+                connect: JSON.parse(req.body.courseCats).map(data => ({ id: data }))
               }
             },
           });
-          return res.status(200).json({course,success:true})
+          return res.status(200).json({ course, success: true })
         })
-     
-                  
-         
-  
-    
+
+
+
+
+
       }
     );
     streamifier.createReadStream(req.file.buffer).pipe(stream);
-  }else{
-    
+  } else {
+
     const course = await prisma.course.update({
-      where:{
-          id:req.body.course_id
+      where: {
+        id: req.body.course_id
       },
       data: {
-        title:req.body.title,
-        description:req.body.description,
-        price:parseFloat(req.body.price),
-        categories:{
-          connect:JSON.parse(req.body.courseCats).map(data=>({id:data}))
+        title: req.body.title,
+        description: req.body.description,
+        price: parseFloat(req.body.price),
+        categories: {
+          connect: JSON.parse(req.body.courseCats).map(data => ({ id: data }))
         }
       },
-      include:{
-        students:true,
-        lessons:true,
-        categories:true,
-        author:true,
+      include: {
+        students: true,
+        lessons: true,
+        categories: true,
+        author: true,
       }
     });
- 
-    return res.status(200).json({course,success:true})
+
+    return res.status(200).json({ course, success: true })
   }
-  
-  
+
+
 }
 
 export const config = {

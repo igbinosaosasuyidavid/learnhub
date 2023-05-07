@@ -8,7 +8,7 @@ import { BsFacebook, BsLinkedin, BsTwitter } from "react-icons/bs";
 
 export default function Footer() {
 
-  const router=useRouter()
+    const router = useRouter()
 
 
     return (
@@ -21,19 +21,19 @@ export default function Footer() {
                         <Link href="/privacy-policy" className="sm:text-xs xs:text-[10px]">Privacy</Link>
                         <Link href="/terms" className="sm:text-xs xs:text-[10px]">Terms of use</Link>
                     </div>
-                   
+
                     <div className="inline-flex ml-auto gap-3">
-                        <Link href="/"><BsTwitter/></Link>
-                        <Link href="/"><BsLinkedin/></Link>
-                        <Link href="/"><BsFacebook/></Link>
-              
+                        <Link href="/"><BsTwitter /></Link>
+                        <Link href="/"><BsLinkedin /></Link>
+                        <Link href="/"><BsFacebook /></Link>
+
                     </div>
 
                 </div>
-               
+
             </div>
-           
+
         </footer>
     )
-  }
-  
+}
+

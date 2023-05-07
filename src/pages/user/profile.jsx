@@ -6,6 +6,7 @@ import { authOptions } from "../api/auth/[...nextauth]";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { BiSave, BiStar } from "react-icons/bi";
+import prisma from '../../../prisma/db'
 import { BsStarFill } from "react-icons/bs";
 import LoaderContext from "@/contexts/loader";
 import { useSession } from "next-auth/react";

@@ -6,25 +6,25 @@ module.exports = {
     './src/app/**/*.{js,ts,jsx,tsx}',
   ],
   theme: {
-  
 
-    extend:{
+
+    extend: {
       colors: {
-     
+
         transparent: 'transparent',
         current: 'currentColor',
         'white': '#ffffff',
-        "primary":"#85d1a0",
-        "secondary":"#6255a4",
+        "primary": "#85d1a0",
+        "secondary": "#6255a4",
       },
       screens: {
-        "xs":"300px",
+        "xs": "300px",
         'sm': '540px',
-      
+
         // => @media (min-width: 992px) { ... }
       },
     },
-    
-  plugins: [],
+
+    plugins: [],
   }
 }

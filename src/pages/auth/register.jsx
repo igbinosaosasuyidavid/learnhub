@@ -12,41 +12,41 @@ import { FaEnvelope, FaLock, FaPencilAlt, FaUser } from "react-icons/fa";
 function Register() {
   const router = useRouter();
   const { data: session } = useSession();
-  const {setShowLoader}=useContext(LoaderContext)
-  const {setToast}=useContext(ToastContext)
+  const { setShowLoader } = useContext(LoaderContext)
+  const { setToast } = useContext(ToastContext)
   const registerUser = async (event) => {
     event.preventDefault();
     // use custom register endpoint
 
-    
+
     try {
       const form = event.target
-      if (form.password.value!==form.cpassword.value) {
+      if (form.password.value !== form.cpassword.value) {
 
-        setToast("Password do not match","error")
+        setToast("Password do not match", "error")
         return null
       }
-          setShowLoader(true)
-       
+      setShowLoader(true)
+
       const res = await axios.post("/api/auth/custom_register", {
         password: form.password.value,
         email: form.email.value,
         fullName: form.fname.value + " " + form.lname.value,
-        creator:form.creator.value
+        creator: form.creator.value
       });
       if (res.data.success) {
         setShowLoader(false)
-        setToast("Sign up successful","success")
+        setToast("Sign up successful", "success")
         router.push("/auth/login");
-      }else{
+      } else {
         setShowLoader(false)
-        setToast(res.data.message,"error")
+        setToast(res.data.message, "error")
       }
     } catch (err) {
       console.log(err);
       if (err.response) {
         setShowLoader(false)
-        setToast(err.response.data.message,"error")
+        setToast(err.response.data.message, "error")
       }
     }
   };
@@ -55,7 +55,7 @@ function Register() {
   }
   return (
     // <div className="md:grid grid-cols-[1fr] h-screen">
-   
+
     //   <div className="flex justify-center pt-10">
     //     <div className="max-w-[400px] w-full p-5 mx-auto pt-2">
     //       <form onSubmit={registerUser}>
@@ -80,7 +80,7 @@ function Register() {
     //             id="lname"
     //             placeholder="Last Name"
     //             className="p-4 px-6 rounded-lg  bg-slate-100"
-                
+
     //           />
     //           <input
     //             type="email"
@@ -113,10 +113,10 @@ function Register() {
     //             Create Account
     //           </button>
     //         </div>
-         
+
     //       </form>
 
-         
+
     //       <p className="text-center">
     //         Already have an account?{" "}
     //         <Link href={"/auth/login"} className="font-semibold">
@@ -127,35 +127,35 @@ function Register() {
     //   </div>
     // </div>
     <div className="flex items-center bg-[url('/login4.png')] min-h-screen bg-fixed  bg-cover xs:bg-center md:bg-center bg-no-repeat overlay xs:px-6  lg:px-0">
-    <div className="h-full m-auto w-full">
-      <div className="flex m-auto items-center justify-center h-full md:w-[400px] xs:w-full">
+      <div className="h-full m-auto w-full">
+        <div className="flex m-auto items-center justify-center h-full md:w-[400px] xs:w-full">
           <div className="text-center w-full">
-            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 md:h-28 md:w-28 xs:h-24 xs:w-24 cursor-pointer' width={200} height={200} onClick={()=>{router.push('/')}}/>
-        
-            
+            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 md:h-28 md:w-28 xs:h-24 xs:w-24 cursor-pointer' width={200} height={200} onClick={() => { router.push('/') }} />
+
+
             <h1 className="text-left text-white md:text-2xl xs:text-xl mb-3  mt-7">Start your journey now</h1>
             <form onSubmit={registerUser}>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
-                <FaUser color={'white'} className="w-1/6"/>
-                <input type="text" name="fname" placeholder="First Name" id="fname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
+                <FaUser color={'white'} className="w-1/6" />
+                <input type="text" name="fname" placeholder="First Name" id="fname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required />
               </div>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
-                <FaUser color={'white'} className="w-1/6"/>
-                <input type="text" name="lname" placeholder="Last Name" id="lname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
+                <FaUser color={'white'} className="w-1/6" />
+                <input type="text" name="lname" placeholder="Last Name" id="lname" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required />
               </div>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
-                <FaEnvelope color={'white'} className="w-1/6"/>
-                <input type="email" name="email" placeholder="Email Address" id="email" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
+                <FaEnvelope color={'white'} className="w-1/6" />
+                <input type="email" name="email" placeholder="Email Address" id="email" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required />
               </div>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
-                <FaLock color={'white'} className="w-1/6"/>
-                <input type="password" name="password" placeholder="Password" id="password" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
+                <FaLock color={'white'} className="w-1/6" />
+                <input type="password" name="password" placeholder="Password" id="password" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required />
               </div>
-             
-           
+
+
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
-                <FaLock color={'white'} className="w-1/6"/>
-                <input type="password" name="cpassword" placeholder="Confirm Password" id="cpassword" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
+                <FaLock color={'white'} className="w-1/6" />
+                <input type="password" name="cpassword" placeholder="Confirm Password" id="cpassword" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required />
               </div>
 
               <div className=" mb-5 px-5 p-4">
@@ -163,36 +163,36 @@ function Register() {
                   <h3 className="text-white text-lg">Are you a course creator?</h3>
                   <FaPencilAlt color={'white'} />
                 </div>
-                <div  className="flex">
-                  <input type="radio" name="creator" id="yes" className="rounded-[50px] bg-transparent cursor-pointer  !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]"  value={"true"}/>
+                <div className="flex">
+                  <input type="radio" name="creator" id="yes" className="rounded-[50px] bg-transparent cursor-pointer  !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" value={"true"} />
                   <label htmlFor="yes" className="text-gray-300 mr-3 ml-1">Yes</label>
-                  <input type="radio" name="creator" id="no" className="rounded-[50px] bg-transparentcursor-pointer !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" value={"false"} defaultChecked/>
+                  <input type="radio" name="creator" id="no" className="rounded-[50px] bg-transparentcursor-pointer !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" value={"false"} defaultChecked />
                   <label htmlFor="no" className="text-gray-300 ml-1">No</label>
                 </div>
-               
-     
-         
-        
-            
+
+
+
+
+
               </div>
               <div className="flex mb-5 mt-3">
-                  <button type="submit" className="w-full bg-secondary text-white rounded-[50px] py-4 p-4 xs:py-4 md:text-[16px] xs:text-[12px] tracking-[0.4rem] font-semibold hover:opacity-90 duration-300">REGISTER</button>
+                <button type="submit" className="w-full bg-secondary text-white rounded-[50px] py-4 p-4 xs:py-4 md:text-[16px] xs:text-[12px] tracking-[0.4rem] font-semibold hover:opacity-90 duration-300">REGISTER</button>
               </div>
               <div className="flex items-center">
                 <div>
                   <input type="checkbox" name="remember" id="remember" className="inline-block rounded-3xl" />
                   <span className="text-gray-300 ml-2 inline-block text-sm">Remember Me</span>
                 </div>
-            
+
               </div>
               <div className="flex">
-                <Link href="/auth/login" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer  md:text-[16px] xs:text-[13px]" onClick={(e)=>{e.preventDefault();router.push('/auth/login')}}>LOGIN</Link>
-  
+                <Link href="/auth/login" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer  md:text-[16px] xs:text-[13px]" onClick={(e) => { e.preventDefault(); router.push('/auth/login') }}>LOGIN</Link>
+
               </div>
-              
+
             </form>
           </div>
-  
+
         </div>
         <div className="md:flex items-center mb-4 justify-center bg-transparent mt-7 w-[70%] m-auto">
           <div className="md:w-1/2 xs:text-center md:text-left">
@@ -206,7 +206,7 @@ function Register() {
           </div>
         </div>
       </div>
-  
+
     </div>
   );
 }

@@ -6,15 +6,15 @@ async function handler(req, res) {
     try {
       await prisma.$connect()
       const { email, password, fullName, creator } = req.body;
-      let users=await prisma.user.findMany()
-   
+      let users = await prisma.user.findMany()
+
       // check if user exists
       let user = await prisma.user.findUnique({
         where: { email },
       });
 
-      if (user){
-     
+      if (user) {
+
         return res
           .status(400)
           .json({ success: false, message: "User already exist" });
@@ -28,7 +28,7 @@ async function handler(req, res) {
           email,
           hash,
           fullName,
-          admin:creator==="true"?true:false
+          admin: creator === "true" ? true : false
         },
       });
       console.log('user dong');

@@ -76,6 +76,36 @@ function Course({ course, userIsStudent, wishlisted }) {
 
 
 
+    const enrollUser = async () => {
+        if (session?.user?.admin) {
+            setToast("Teachers cannot enroll courses", "info");
+            return null
+        }
+        if (course.price !== 0) {
+            setToast("Not a free course", "error");
+            return null
+        }
+        try {
+            setShowLoader(true)
+            const res = await axios.post('/api/app/courses/enroll-user', {
+
+                course_id: course.id
+            })
+
+            if (res.data.success) {
+                setToast("Succesfully Enrolled", "success");
+                setShowLoader(false)
+                router.replace(router.asPath);
+            } else {
+                setToast("Enroll failed ", "error");
+                setShowLoader(true)
+            }
+        } catch (e) {
+            console.log(e);
+            setToast("Something went wrong", "error");
+            setShowLoader(false)
+        }
+    }
     const addCourseToWishlist = async (e) => {
         e.preventDefault()
         if (!session?.user) return router.push("/auth/login")
@@ -113,7 +143,7 @@ function Course({ course, userIsStudent, wishlisted }) {
         e.preventDefault();
         if (!session?.user) return router.push("/auth/login");
         if (session?.user?.admin) {
-            setToast("Teachers cannot buy courses", "info");
+            setToast("Teachers cannot purchase courses", "info");
             return null
         }
         try {
@@ -222,7 +252,7 @@ function Course({ course, userIsStudent, wishlisted }) {
                                                 if (!userIsStudent) {
                                                     if (session?.user) {
                                                         setToast(
-                                                            "Please purchase this course to be enrolled",
+                                                            "Please enroll into the course first ",
                                                             "info"
                                                         );
                                                     } else {
@@ -280,58 +310,69 @@ function Course({ course, userIsStudent, wishlisted }) {
                                 <>
                                     <div className="flex items-center mb-4">
                                         <h4 className="font-semibold md:text-3xl xs:text-xl">
-                                            {new Intl.NumberFormat("en-US", {
+                                            {course.price !== 0 ? new Intl.NumberFormat("en-US", {
                                                 style: "currency",
                                                 currency: "USD",
                                                 currencyDisplay: "narrowSymbol",
                                                 minimumFractionDigits: 0,
-                                            }).format(parseFloat(course.price).toFixed(3))}
+                                            }).format(parseFloat(course.price).toFixed(3)) : "Free"}
                                         </h4>
-                                        <span className="font-normal !text-sm ml-auto">
+                                        {course.price !== 0 && <span className="font-normal !text-sm ml-auto">
                                             14 days refund policy
-                                        </span>
-                                    </div>
-                                    <div className="flex items-center gap">
-                                        <button
-                                            className="bg-secondary text-white p-3 w-5/6 rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"
-                                            onClick={() => {
-                                                addToCart(course, (err) => {
-                                                    if (err) {
-                                                        setToast(`Already in your cart`, "info");
-                                                    } else {
-                                                        setToast(`Added to cart.`, "success");
-                                                        window.scrollTo(0, 0);
-                                                    }
-                                                });
-                                            }}
-                                        >
-                                            Add to Cart
-                                        </button>
-                                        <button title="Add to wishlist"
-                                            className=" w-1/6 text-white p-3 rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm ml-auto"
-                                            onClick={(e) => {
-                                                e.target.disabled = true;
-                                                try {
-                                                    if (wished) removeCourseFromWishlist(e);
-                                                    else addCourseToWishlist(e);
-                                                } catch (error) {
-                                                    console.log(error);
-                                                } finally {
-                                                    e.target.disabled = false;
-                                                }
-                                            }}
-                                        >
-                                            {wished ? <BsHeartFill size={30} color="#6255a4" /> : <BiHeart size={30} color="#6255a4" />}
-                                        </button>
-
+                                        </span>}
                                     </div>
 
-                                    <button
-                                        className="bg-transparent text-black p-3 w-full active:border focus:border border border-gray-500 rounded-lg hover:bg-gray-100 duration-300 focus:border-gray-500 active:border-gray-500 font-semibold xs:text-xs md:text-sm"
-                                        onClick={checkOut}
-                                    >
-                                        Purchase Now
-                                    </button>
+                                    {
+                                        course.price !== 0 ? <>
+                                            <div className="flex items-center gap">
+                                                <button
+                                                    className="bg-secondary text-white p-3 w-5/6 rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"
+                                                    onClick={() => {
+                                                        addToCart(course, (err) => {
+                                                            if (err) {
+                                                                setToast(`Already in your cart`, "info");
+                                                            } else {
+                                                                setToast(`Added to cart.`, "success");
+                                                                window.scrollTo(0, 0);
+                                                            }
+                                                        });
+                                                    }}
+                                                >
+                                                    Add to Cart
+                                                </button>
+                                                <button title="Add to wishlist"
+                                                    className=" w-1/6 text-white p-3 rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm ml-auto"
+                                                    onClick={(e) => {
+                                                        e.target.disabled = true;
+                                                        try {
+                                                            if (wished) removeCourseFromWishlist(e);
+                                                            else addCourseToWishlist(e);
+                                                        } catch (error) {
+                                                            console.log(error);
+                                                        } finally {
+                                                            e.target.disabled = false;
+                                                        }
+                                                    }}
+                                                >
+                                                    {wished ? <BsHeartFill size={30} color="#6255a4" /> : <BiHeart size={30} color="#6255a4" />}
+                                                </button>
+
+                                            </div>
+
+                                            <button
+                                                className="bg-transparent text-black p-3 w-full active:border focus:border border border-gray-500 rounded-lg hover:bg-gray-100 duration-300 focus:border-gray-500 active:border-gray-500 font-semibold xs:text-xs md:text-sm"
+                                                onClick={checkOut}
+                                            >
+                                                Purchase Now
+                                            </button>
+                                        </> : <button
+                                            className="bg-secondary text-white p-3 w-full rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"
+                                            onClick={enrollUser}
+                                        >
+                                            Enroll
+                                        </button>
+                                    }
+
                                 </>
                             )}
                         </div>

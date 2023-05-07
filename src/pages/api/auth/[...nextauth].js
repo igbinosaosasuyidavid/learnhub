@@ -25,7 +25,7 @@ export const authOptions = {
           let user = await prisma.user.findUnique({
             where: { email },
           });
-      
+
           if (!user) {
             return null;
           }
@@ -41,8 +41,8 @@ export const authOptions = {
           return {
             name: user.fullName,
             email: user.email,
-            admin:user.admin,
-            pic:user.pic,
+            admin: user.admin,
+            pic: user.pic,
             id: user.id,
           };
         } catch (error) {
@@ -53,8 +53,8 @@ export const authOptions = {
     }),
   ],
   callbacks: {
-    jwt: async ({ token, user,trigger,session }) => {
-      
+    jwt: async ({ token, user, trigger, session }) => {
+
       if (user) {
         token.id = user.id;
         token.admin = user.admin;
@@ -70,8 +70,8 @@ export const authOptions = {
         session.id = token.id;
         session.user.admin = token.admin;
         session.user.pic = token.pic;
-     
-      
+
+
       }
       return session;
     },

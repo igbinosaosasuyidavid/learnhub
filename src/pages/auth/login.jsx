@@ -9,9 +9,9 @@ import { FaLock, FaUser } from "react-icons/fa";
 
 function Login() {
   const router = useRouter();
-  const { data:session } = useSession();
-  const {setShowLoader}=useContext(LoaderContext)
-  const {setToast}=useContext(ToastContext)
+  const { data: session } = useSession();
+  const { setShowLoader } = useContext(LoaderContext)
+  const { setToast } = useContext(ToastContext)
   const loginUser = async (event) => {
     event.preventDefault();
 
@@ -24,19 +24,19 @@ function Login() {
         password: form.password.value,
       });
 
-      if (result?.ok){ 
+      if (result?.ok) {
         router.push("/");
-        setShowLoader(false) 
+        setShowLoader(false)
       }
       else {
         setShowLoader(false)
-        setToast("Incorrect credentials","error");
+        setToast("Incorrect credentials", "error");
       }
     } catch (err) {
       console.log(err);
       if (err.response) {
         setShowLoader(false)
-        setToast(err.response.data.message,'error');
+        setToast(err.response.data.message, 'error');
       }
     }
   };
@@ -49,20 +49,20 @@ function Login() {
       <div className="h-full m-auto w-full">
         <div className="flex m-auto items-center justify-center h-full md:w-[400px] xs:w-full">
           <div className="text-center w-full">
-            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 md:h-28 md:w-28 xs:h-24 xs:w-24 cursor-pointer' width={200} height={200} onClick={()=>{router.push('/')}}/>
-            
+            <Image src="/logo.svg" alt="" className='text-center !inline mb-3 mt-8 md:h-28 md:w-28 xs:h-24 xs:w-24 cursor-pointer' width={200} height={200} onClick={() => { router.push('/') }} />
+
             <h1 className="text-left text-white md:text-2xl xs:text-xl mb-3  mt-7">Welcome back!</h1>
             <form onSubmit={loginUser}>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
-                <FaUser color={'white'} className="w-1/6"/>
-                <input type="email" name="email" placeholder="Email Address" id="email" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
+                <FaUser color={'white'} className="w-1/6" />
+                <input type="email" name="email" placeholder="Email Address" id="email" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required />
               </div>
               <div className=" mb-5 flex items-center rounded-[50px] bg-[rgba(173,173,173,0.4)] px-5 p-4">
-                <FaLock color={'white'} className="w-1/6"/>
-                <input type="password" name="password" placeholder="Password" id="password" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required/>
+                <FaLock color={'white'} className="w-1/6" />
+                <input type="password" name="password" placeholder="Password" id="password" className="rounded-[50px] bg-transparent w-5/6 !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" required />
               </div>
               <div className="flex mb-5 mt-3">
-                  <button type="submit" className="w-full bg-secondary text-white rounded-[50px] md:py-4 p-4 xs:py-3 md:text-[16px] xs:text-[12px] tracking-[0.4rem] font-semibold hover:opacity-90 duration-300">LOGIN</button>
+                <button type="submit" className="w-full bg-secondary text-white rounded-[50px] md:py-4 p-4 xs:py-3 md:text-[16px] xs:text-[12px] tracking-[0.4rem] font-semibold hover:opacity-90 duration-300">LOGIN</button>
               </div>
               <div className="flex items-center">
                 <div>
@@ -72,13 +72,13 @@ function Login() {
                 <div className="ml-auto">
                   <Link href="/auth/forgot-password" className="text-gray-300 hover:text-white duration-300 md:text-[16px] xs:text-[12px]">Forgot password?</Link>
                 </div>
-               
-              </div>
-              <div className="flex">
-                <Link href="/auth/register" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer md:text-[16px] xs:text-[13px]"  onClick={(e)=>{ e.preventDefault(); router.push('/auth/register')}}>CREATE ACCOUNT</Link>
 
               </div>
-             
+              <div className="flex">
+                <Link href="/auth/register" className="text-gray-100 font-semibold mt-5 hover:text-primary cursor-pointer md:text-[16px] xs:text-[13px]" onClick={(e) => { e.preventDefault(); router.push('/auth/register') }}>CREATE ACCOUNT</Link>
+
+              </div>
+
             </form>
           </div>
 
@@ -95,9 +95,9 @@ function Login() {
           </div>
         </div>
       </div>
-  
+
     </div>
-  
+
   );
 }
 

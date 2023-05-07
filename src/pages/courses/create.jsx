@@ -18,25 +18,25 @@ export const getServerSideProps = async ({ req, res }) => {
         res.statusCode = 302;
         res.end();
         return {
-            props:{}
+            props: {}
         };
     }
 
     const categories = await prisma.category.findMany({
         where: {},
     })
-    console.log(categories,'-------------');
+    console.log(categories, '-------------');
     return {
         props: { categories: JSON.parse(JSON.stringify(categories)) }
     }
 }
 export default function Create({ categories }) {
     const [courseCategories, setCourseCatgories] = useState([])
-    const {setShowLoader} = useContext(LoaderContext)
-    const {setToast} = useContext(ToastContext)
+    const { setShowLoader } = useContext(LoaderContext)
+    const { setToast } = useContext(ToastContext)
     const [courseImage, setCourseImage] = useState()
-    const {data:session}=useSession()
-    const router=useRouter()
+    const { data: session } = useSession()
+    const router = useRouter()
     const createCourse = async (event) => {
         if (!courseImage) {
             setToast('Please upload an image for your course', 'error')
@@ -59,14 +59,14 @@ export default function Create({ categories }) {
             const res = await axios.post(`/api/app/courses/create-course`, formData)
             console.log(res.data);
             if (res.data.success) {
-              
+
                 setShowLoader(false)
                 setToast('Course created', 'success')
                 setTimeout(() => {
                     setShowLoader(true)
                     router.push(`/user/courses/${session?.id}`);
                 }, 2000);
-              
+
 
             } else {
                 setToast('Something is wrong with your input please try again', 'warning')
@@ -91,16 +91,16 @@ export default function Create({ categories }) {
             reader.onload = () => {
                 const parent = document.querySelector('.preview-box')
                 parent.innerHTML = `<Image class="h-[150px] w-full object-cover rounded-lg" src=${reader.result} />`
-                
+
             }
             reader.readAsDataURL(file)
 
         }
     }
 
-    useEffect(()=>{
+    useEffect(() => {
         setShowLoader(false)
-    },[])
+    }, [])
     return (
         <>
             <Nav />
@@ -181,7 +181,7 @@ export default function Create({ categories }) {
                 </div>
 
             </section>
-            <Footer/>
+            <Footer />
         </>
 
 

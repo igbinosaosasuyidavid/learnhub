@@ -31,29 +31,29 @@ export default async function handler(req, res) {
     {
       folder: "courseFeatured",
     },
-     async (error, result) => {
+    async (error, result) => {
       if (error) return res.status(500).send("Sorry an error occured on the server");
-      console.log(req.body.courseCats,'-------');
+      console.log(req.body.courseCats, '-------');
       const course = await prisma.course.create({
         data: {
-          title:req.body.title,
-          description:req.body.description,
-          price:parseFloat(req.body.price),
-          featuredImage:result.secure_url,
-          author:{
-            connect:{
-              id:req.body.user_id
+          title: req.body.title,
+          description: req.body.description,
+          price: parseFloat(req.body.price),
+          featuredImage: result.secure_url,
+          author: {
+            connect: {
+              id: req.body.user_id
             },
-        
+
 
           },
-          categories:{
-            connect:JSON.parse(req.body.courseCats).map(data=>({id:data}))
+          categories: {
+            connect: JSON.parse(req.body.courseCats).map(data => ({ id: data }))
           }
         },
       });
 
-    return res.status(200).json({course,success:true})
+      return res.status(200).json({ course, success: true })
     }
   );
   streamifier.createReadStream(req.file.buffer).pipe(stream);

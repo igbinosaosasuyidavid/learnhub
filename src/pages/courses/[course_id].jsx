@@ -7,13 +7,14 @@ import { FaTimes, FaUserFriends } from "react-icons/fa";
 import { MdOndemandVideo } from "react-icons/md";
 import CartContext from "@/contexts/cart";
 import { useSession } from "next-auth/react";
-import { BsStar } from "react-icons/bs";
+import { BsHeartFill, BsStar } from "react-icons/bs";
 import { loadStripe } from "@stripe/stripe-js";
 import { authOptions } from "../api/auth/[...nextauth]";
 import prisma from "../../../prisma/db";
 import { getServerSession } from "next-auth";
 import { useRouter } from "next/router";
 import Image from "next/image";
+import { BiHeart } from "react-icons/bi";
 const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY
 );
@@ -75,9 +76,25 @@ function Course({ course, userIsStudent, wishlisted }) {
 
 
 
+    const addCourseToWishlist = async (e) => {
+        e.preventDefault()
+        if (!session?.user) return router.push("/auth/login")
+
+        try {
+            console.log("Adding course to wishlist");
+            await axios.post("/api/app/user/wishlist", {
+                courseId: course.id,
+            });
+            setWished(true);
+            setToast("Added to wishlist", 'success')
+        } catch (error) {
+            console.log("Couldn't add to wishlist");
+            console.log(error);
+        }
+    };
 
     const removeCourseFromWishlist = async () => {
-        if (!session.id) return router.push("/auth/login");
+        if (!session.id) return alert("Please login");
         try {
             console.log("Removing course from wishlist");
             console.log(course);
@@ -85,6 +102,7 @@ function Course({ course, userIsStudent, wishlisted }) {
                 courseId: course.id,
             });
             setWished(false);
+            setToast("Removed from wishlist", 'success')
         } catch (error) {
             console.log("Couldn't add to wishlist");
             console.log(error);
@@ -273,26 +291,9 @@ function Course({ course, userIsStudent, wishlisted }) {
                                             14 days refund policy
                                         </span>
                                     </div>
-                                    <div className="flex">
+                                    <div className="flex items-center gap">
                                         <button
-                                            className="bg-secondary text-white p-3 w-full rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"
-                                            onClick={(e) => {
-                                                e.target.disabled = true;
-                                                try {
-                                                    if (wished) removeCourseFromWishlist();
-                                                    else addCourseToWishlist();
-                                                } catch (error) {
-                                                    console.log(error);
-                                                } finally {
-                                                    e.target.disabled = false;
-                                                }
-                                            }}
-                                        >
-                                            {wished ? "Remove from" : "Add to"} Wishlist
-                                        </button>
-
-                                        <button
-                                            className="bg-secondary text-white p-3 w-full rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"
+                                            className="bg-secondary text-white p-3 w-5/6 rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"
                                             onClick={() => {
                                                 addToCart(course, (err) => {
                                                     if (err) {
@@ -306,6 +307,23 @@ function Course({ course, userIsStudent, wishlisted }) {
                                         >
                                             Add to Cart
                                         </button>
+                                        <button title="Add to wishlist"
+                                            className=" w-1/6 text-white p-3 rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm ml-auto"
+                                            onClick={(e) => {
+                                                e.target.disabled = true;
+                                                try {
+                                                    if (wished) removeCourseFromWishlist(e);
+                                                    else addCourseToWishlist(e);
+                                                } catch (error) {
+                                                    console.log(error);
+                                                } finally {
+                                                    e.target.disabled = false;
+                                                }
+                                            }}
+                                        >
+                                            {wished ? <BsHeartFill size={30} color="#6255a4" /> : <BiHeart size={30} color="#6255a4" />}
+                                        </button>
+
                                     </div>
 
                                     <button

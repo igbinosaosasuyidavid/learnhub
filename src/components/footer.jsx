@@ -21,6 +21,7 @@ export default function Footer() {
                         <Link href="/privacy-policy" className="sm:text-xs xs:text-[10px]">Privacy</Link>
                         <Link href="/terms" className="sm:text-xs xs:text-[10px]">Terms of use</Link>
                     </div>
+                   
                     <div className="inline-flex ml-auto gap-3">
                         <Link href="/"><BsTwitter/></Link>
                         <Link href="/"><BsLinkedin/></Link>

@@ -1,16 +1,22 @@
 import Footer from "@/components/footer";
 import Nav from "@/components/nav";
+import CartContext from "@/contexts/cart";
+import LoaderContext from "@/contexts/loader";
+import ToastContext from "@/contexts/toast";
 import axios from "axios";
 import Image from "next/image";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { BsCart3 } from "react-icons/bs";
 import { FaUserTie } from "react-icons/fa";
 
 function Wishlist() {
-
+  const {setShowLoader}=useContext(LoaderContext)
+  const {cart,addToCart}=useContext(CartContext)
+  const {setToast}=useContext(ToastContext)
   const [courses, setCourses] = useState([]);
 
   useEffect(() => {
+    setShowLoader(false)
     async function getWishes() {
       try {
         const result = await axios.get("/api/app/user/wishlist");
@@ -28,7 +34,7 @@ function Wishlist() {
       <Nav />
       <section className="py-4 xs:px-6 lg:px-0 border-t border-gray-200">
         <div className="custom-container">
-          <h2 className="md:text-3xl xs:text-xl font-semibold mt-14">Your Wishlist</h2>
+          <h2 className="md:text-3xl xs:text-xl font-semibold mt-14 mb-8">Your Wishlist</h2>
         {courses.length !== 0 ? (
         <div className="grid md:grid-cols-3 lg:grid-cols-4 gap-5 xs:grid-cols-2 mb-8">
           {courses

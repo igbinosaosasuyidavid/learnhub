@@ -9,14 +9,14 @@ import { useRouter } from "next/router";
 import * as tus from 'tus-js-client'
 
 
-import CartContext from "@/contexts/cart";
+
 import prisma from "../../../../prisma/db"
 import { FiEdit, FiFilePlus } from "react-icons/fi";
 
-import { MdAdd} from "react-icons/md";
+
 import { BsArrowBarLeft } from "react-icons/bs";
 import { useSession } from "next-auth/react";
-import { FaTimes } from "react-icons/fa";
+
 import Image from "next/image";
 import Footer from "@/components/footer";
 import { getServerSession } from "next-auth";
@@ -28,7 +28,15 @@ import { BiTrash } from "react-icons/bi";
 
 export const getServerSideProps=async ({ req, res ,params})=>{
     const session= await getServerSession(req, res, authOptions)
-   
+    if (!session) {
+        
+        res.setHeader("location", "/auth/login");
+        res.statusCode = 302;
+        res.end();
+        return {
+            props:{}
+        };
+    }
   
     const categories = await prisma.category.findMany({
         where: {},
@@ -68,20 +76,18 @@ export const getServerSideProps=async ({ req, res ,params})=>{
 
     var carr=result.enrolledCourses || result.createdCourses
     return {
-        props: {categories: JSON.parse(JSON.stringify(categories)),courses:carr.length!==0?JSON.parse(JSON.stringify(carr)):[],isAdmin:session?.user?.admin},
+        props: {categories: JSON.parse(JSON.stringify(categories)),courses:carr.length!==0?JSON.parse(JSON.stringify(carr)):[],isAdmin:session?.user?.admin || null},
     }
 }
 
 function Course({courses,categories,isAdmin}) {
     const [duration,setDuration]=useState()
     const [courseModal,setCourseModal]=useState(false)
-    const [createModal,setCreateModal]=useState(false)
     const [loaded,setLoaded]=useState(0)
     const [currentCourse,setCurrentCourse]=useState()
     const [courseImage,setCourseImage]=useState()
-    const [courseImageC,setCourseImageC]=useState()
     const {setShowLoader}=useContext(LoaderContext)
-    const [courseCategories,setCourseCatgories]=useState([])
+   
     const [courseCategoriesUp,setCourseCatgoriesUp]=useState([])
     const {setToast}=useContext(ToastContext)
     const router=useRouter()
@@ -296,44 +302,7 @@ function Course({courses,categories,isAdmin}) {
          
         }
       }
-      const createCourse = async (event) => {
-       
-        event.preventDefault();
-      
-        const {title_c,description_c,price_c}=event.target
-        console.log(event.target);
-        try {
-            setShowLoader(true)
-            const formData=new FormData()
-            formData.set("courseImage", courseImageC);
-            formData.append("title",title_c.value)
-            formData.append("user_id",session?.id)
-            formData.append("description",description_c.value)
-            formData.append("host",window.location.origin)
-            formData.append("price",price_c.value)
-            formData.append("courseCats",JSON.stringify(courseCategories))
-      
-            const res= await axios.post(`/api/app/courses/create-course`, formData)
-            console.log(res.data);
-            if (res.data.success) {
-                console.log(res.data);
-                setShowLoader(false)
-                setToast('Course created','success')
-                setCreateModal(false)
-                router.replace(router.asPath);
     
-            }else{
-                setToast('Something is wrong with your input please try again','warning')
-            }
-     
-        } catch (err) {
-            console.log(err);
-            setShowLoader(false)
-            if (err.response) {
-                setToast(err.response.data.message,'error')
-            }
-        }
-    };
     const removeStudent=async (student_id)=>{
         setShowLoader(true)
         try {
@@ -356,11 +325,7 @@ function Course({courses,categories,isAdmin}) {
                     <div className="custom-container ">
                         <h3 className="md:text-4xl xs:text-2xl text-center mt-10 mb-4"> {isAdmin ? "My" :"Enrolled"} courses</h3>
 
-                        { isAdmin &&
-                            <div className="flex justify-end mb-7">
-                                <button className="ml-auto bg-secondary text-white p-2 xs:py-1 rounded-lg inline-flex gap-1 items-center duration-300 hover:opacity-90 md:text-sm xs:text-xs" onClick={(e)=>{e.preventDefault();setCreateModal(true)}}><MdAdd size={25}/> New Course</button>
-                            </div>
-                        }
+                  
                         
                     
                 
@@ -591,86 +556,7 @@ function Course({courses,categories,isAdmin}) {
             }
         
         </>
-        <>
-            {
-                createModal && <>
-                    <div className="fixed top-0 bg-[rgb(0,0,0,0.3)] w-full h-screen flex items-center justify-center">
-                    <div className=" bg-white rounded-md p-6 relative md:w-[600px] xs:w-[94%]">
-                            <span className="absolute top-2 right-3 text-lg hover:text-gray-500 cursor-pointer duration-300 inline-flex gap-2 items-center text-secondary font-semibold" onClick={(e)=>{e.preventDefault();setCreateModal(false)}}><FaTimes/></span>
-                            <div className="">
-                                <form onSubmit={createCourse} method="POST" className="w-full">
-                                    <h2 className="text-black font-medium mb-3 md:text-2xl xs:text-lg">
-                                        Create Course
-                                    </h2>
-                                    <div className="md:flex gap-6 items-center">
-                                        <div className="md:w-3/5">
-                                            <div className="mb-3">
-                                   
-                                            <input required type="text" name="title_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg md:text-sm xs:text-xs" placeholder="Course Title"  id="title_c"/>
-
-                                            </div>
-                                            <div className="mb-3">
-                                          
-                                                <textarea required name="description_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg md:text-sm xs:text-xs outline-none shadow-none resize-none" placeholder="Course Description"  id="description_c" rows={6}/>
-
-                                            </div>
-                                            <div className="mb-3">
-                                         
-                                                <input required type="number" name="price_c" className="bg-slate-100 w-full p-2 px-3 rounded-lg md:text-sm xs:text-xs" placeholder="Course Price" id="price_c" step=".01"/>
-
-                                            </div>
-                                        </div>
-                                        <div className="md:w-2/5">
-                                            <div className="mb-3">
-                                                <p className="md:text-sm xs:text-xs my-2">Course Image</p>
-                                                <div onClick={()=>{document.getElementById("image_c").click()}} className="p-2 bg-gray-100 rounded cursor-pointer inline-block w-fit text-gray-600 md:text-sm xs:text-xs">
-                                                    Upload image
-                                                </div>
-                                                <input type="file" required
-                                                name="image_c" hidden onChange={(e)=>handleImage(e,true)} id="image_c" placeholder="Price in $(USD)" className="p-4 px-6 rounded-lg bg-slate-100" accept=".jpg,.jpeg,.png,.svg,.webp" />
-                                                <div className="preview-box3 mt-9">
-                                                   
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <p className="md:text-sm xs:text-xs my-2">Course Category</p>
-                                                {
-                                                    categories.map((c)=><><input type="checkbox" className="mr-0.5" value={c.id} onChange={(e)=>{
-                                                        if (e.target.checked) {
-                                                            setCourseCatgories(prev=>[...prev,e.target.value])
-                                                        }else{
-                                                            setCourseCatgories(prev=>prev.filter((data)=>data!==e.target.value))
-                                                        }
-                                                      
-                                                    }}/><span className="capitalize mr-3 text-xs">{c.name}</span></>)
-                                                }
-                                            </div>
-                                        </div>
-                                    </div>
-                                    
-
-                                    
-                                    
-                                
-                                
-                                
-                                <button type="submit" className=" w-fit py-3 px-6 bg-secondary text-white rounded-lg mt-3">Create</button>
-                                    
-                                
-
-                                        
-                                </form>
-                            </div>
-                        
-                        
-                            
-                        </div>
-                    </div>
-                </>
-            }
-        
-        </>
+ 
         <Footer/>
     </>
    

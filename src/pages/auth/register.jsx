@@ -27,6 +27,7 @@ function Register() {
         return null
       }
           setShowLoader(true)
+       
       const res = await axios.post("/api/auth/custom_register", {
         password: form.password.value,
         email: form.email.value,
@@ -164,9 +165,9 @@ function Register() {
                 </div>
                 <div  className="flex">
                   <input type="radio" name="creator" id="yes" className="rounded-[50px] bg-transparent cursor-pointer  !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]"  value={"true"}/>
-                  <label for="yes" className="text-gray-300 mr-3 ml-1">Yes</label>
-                  <input type="radio" name="creator" id="no" className="rounded-[50px] bg-transparentcursor-pointer !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" value={"false"} checked/>
-                  <label for="no" className="text-gray-300 ml-1">No</label>
+                  <label htmlFor="yes" className="text-gray-300 mr-3 ml-1">Yes</label>
+                  <input type="radio" name="creator" id="no" className="rounded-[50px] bg-transparentcursor-pointer !text-white placeholder:text-gray-300 md:text-sm xs:text-[12px]" value={"false"} defaultChecked/>
+                  <label htmlFor="no" className="text-gray-300 ml-1">No</label>
                 </div>
                
      
@@ -196,8 +197,8 @@ function Register() {
         <div className="md:flex items-center mb-4 justify-center bg-transparent mt-7 w-[70%] m-auto">
           <div className="md:w-1/2 xs:text-center md:text-left">
             <div>
-              <Link href="/privacy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300">Privacy Policy</Link>
-              <Link href="/privacy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300" >Terms and Conditions</Link>
+              <Link href="/privacy-policy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300">Privacy Policy</Link>
+              <Link href="/terms" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300" >Terms and Conditions</Link>
             </div>
           </div>
           <div className="md:w-1/2 xs:text-center md:text-right">

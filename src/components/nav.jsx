@@ -22,7 +22,7 @@ export default function Nav() {
           <div className="flex items-center">
             <div className="flex gap-3 items-center cursor-pointer md:w-2/6 xs:w-1/2 " onClick={(e)=>{e.preventDefault();router.push("/");setShowLoader(true)}}>
                 <Image src="/logo.svg" alt="logo" className="md:w-10 md:h-10 xs:w-8 xs:h-8" width={200} height={200}/>
-                <h2 className="font-semibold text xs:text-xs md:text-[18px]">The Valley</h2>
+                <h2 className="font-semibold text xs:text-xs md:text-[18px]">Learnhub</h2>
             </div>
   
             <ul className={`list-none flex justify-center gap-6 text-center nav-links w-3/6 nav-tog  ${toggle?"toggled":""}`}>

@@ -97,7 +97,10 @@ export default function MenuCart() {
                         </div>
                         <div className='flex justify-center items-center gap-3 mt-3'>
                           <button className='checkout bg-primary hover:opacity-90 duration-300 text-white md:p-2  xs:p-1 md:px-4 xs:px-2 md:text-xs xs:text-[9px] rounded-md'><a href="" onClick={checkOut}>Checkout</a></button>
-                          <button className='checkout bg-black hover:opacity-90 duration-300 text-white rounded-md  md:p-2  xs:p-1 md:px-4 xs:px-2 md:text-xs xs:text-[9px]'>View cart</button>
+                          <button onClick={(e)=>{
+                            e.preventDefault();
+                            router.push('/user/cart')
+                          }} className='checkout bg-black hover:opacity-90 duration-300 text-white rounded-md  md:p-2  xs:p-1 md:px-4 xs:px-2 md:text-xs xs:text-[9px]'>View cart</button>
                         </div>
                   </> 
                   :

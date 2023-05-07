@@ -86,8 +86,8 @@ function Login() {
         <div className="md:flex items-center justify-center bg-transparent mt-7 w-[70%] m-auto">
           <div className="md:w-1/2 xs:text-center md:text-left">
             <div>
-              <Link href="/privacy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300">Privacy Policy</Link>
-              <Link href="/privacy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300" >Terms and Conditions</Link>
+              <Link href="/privacy-policy" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300">Privacy Policy</Link>
+              <Link href="/terms" className="mr-2 text-gray-300 md:text-xs xs:text-[11px] hover:text-white duration-300" >Terms and Conditions</Link>
             </div>
           </div>
           <div className="md:w-1/2 xs:text-center md:text-right">

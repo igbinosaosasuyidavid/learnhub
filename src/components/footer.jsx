@@ -18,13 +18,14 @@ export default function Footer() {
                 <div className="border-b border-gray-300 md:w-1/2 xs:w-5/6 m-auto mb-7">.</div>
                 <div className="flex items-center md:w-1/2 md:m-auto xs:w-full xs:m-0  xs:mt-6">
                     <div className="flex items-center gap-2 ">
-                        <a href="/privacy" className="sm:text-xs xs:text-[10px]">Privacy</a>
-                        <a href="/privacy" className="sm:text-xs xs:text-[10px]">Terms of use</a>
+                        <Link href="/privacy-policy" className="sm:text-xs xs:text-[10px]">Privacy</Link>
+                        <Link href="/terms" className="sm:text-xs xs:text-[10px]">Terms of use</Link>
                     </div>
                     <div className="inline-flex ml-auto gap-3">
-                        <a href=""><BsTwitter/></a>
-                        <a href=""><BsLinkedin/></a>
-                        <a href=""><BsFacebook/></a>
+                        <Link href="/"><BsTwitter/></Link>
+                        <Link href="/"><BsLinkedin/></Link>
+                        <Link href="/"><BsFacebook/></Link>
+              
                     </div>
 
                 </div>

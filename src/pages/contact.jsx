@@ -28,7 +28,7 @@ function Contact() {
                 <h1 className="mb-5 font-semibold text-xl">Fill the form below</h1>
                 <div className="md:flex  items-center justify-center gap-5">
                     <div className="md:w-1/2">
-                      <form action="mailto:thevalley@the.com" method="post">
+                      <form action="mailto:learnhub@gmail.com" method="post">
                         <div className="mb-4">
                             <label htmlFor="name" className="flex items-center gap-1 text-[14px] mb-1"><BiUser className="text-primary"/> Name</label>
                             <input type="text" name="Name" placeholder="John Doe"  className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm"/>
@@ -44,7 +44,7 @@ function Contact() {
                         </div>
 
                         
-                        <button className="border-2 border-black  border-solid mt-7 rounded-lg py-2 px-9 hover:opacity-80 duration-300">Join now</button>
+                        <button className="focus:border-2 active:border-2 border-2 focus:border-black border-black border-solid focus:border-solid mt-7 rounded-lg py-2 px-9 hover:opacity-80 duration-300">Send Message</button>
                             
                       </form>
                     </div>
@@ -58,10 +58,10 @@ function Contact() {
                             <h3 className="font-bold text-lg">044 813 1332</h3>
                         </div>
                         <div className=" p-9 xs:pl-0 nd:pl-9">
-                            <GiPositionMarker className="text-4xl"/>
+                            <BiEnvelope className="text-4xl"/>
                             <span> Email</span>
                         
-                            <h3 className="font-bold text-lg">hello@thevalley.com</h3>
+                            <h3 className="font-bold text-lg">hello@learnhub.com</h3>
                         </div>
                         <div className=" p-9 xs:pl-0 nd:pl-9">
                             <GiPositionMarker className="text-4xl"/>

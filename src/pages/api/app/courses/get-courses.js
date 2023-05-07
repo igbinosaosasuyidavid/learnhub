@@ -11,7 +11,8 @@ export default async function handler(req, res) {
     const result=await prisma.course.findMany({
         where:{},
         include:{
-            author:true
+            author:true,
+            lessons:true
         }
     })
     

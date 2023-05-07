@@ -31,6 +31,7 @@ async function handler(req, res) {
           admin:creator==="true"?true:false
         },
       });
+      console.log('user dong');
       const cleanedUser = { ...user, hash: null };
       return res
         .status(200)

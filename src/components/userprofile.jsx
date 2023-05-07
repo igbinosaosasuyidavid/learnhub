@@ -86,6 +86,18 @@ export default function UserProfile(props) {
                                     <h2 className='text-black font-semibold text-[14px]'>Create Course</h2>
                                 </div>
                             }
+                            { !props.session?.user?.admin &&
+                                 <div className='flex items-center gap-3 cursor-pointer custom-hover p-3 py-4 rounded-md duration-300' onClick={
+                                    (e) => {
+                                        e.preventDefault();
+                                        setShowLoader(true);
+                                        router.push(`/user/wishlist`)
+                                    }
+                                }>
+                                    <BsBook size={20} className='text-gray-700' />
+                                    <h2 className='text-black font-semibold text-[14px]'>Wishlist</h2>
+                                </div>
+                            }
                            
                         </div>
                     </DrawerBody>

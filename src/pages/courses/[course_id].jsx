@@ -69,6 +69,10 @@ function Course({course,userIsStudent}) {
    const checkOut= async (e)=>{
     e.preventDefault()
     if(!session?.user) return router.push("/auth/login")
+    if (session?.user?.admin) {
+        setToast("Teachers cannot buy courses","info");
+        return  null
+    }
     try {
       setShowLoader(true)
       const stripe = await stripePromise;

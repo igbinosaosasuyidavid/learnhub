@@ -40,6 +40,10 @@ export default function MenuCart() {
       router.push("/auth/login")
       return null
     }
+    if (session?.user?.admin) {
+      setToast("Teachers cannot buy courses","info");
+      return  null
+  }
     try {
       setShowLoader(true)
       const stripe = await stripePromise;

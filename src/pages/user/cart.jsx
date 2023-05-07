@@ -30,6 +30,10 @@ export default function Profile() {
             router.push("/auth/login")
             return null
         }
+        if (session?.user?.admin) {
+            setToast("Teachers cannot buy courses","info");
+            return  null
+        }
         try {
       
             setShowLoader(true)

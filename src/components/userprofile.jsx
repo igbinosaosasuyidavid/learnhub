@@ -64,7 +64,7 @@ export default function UserProfile(props) {
                                 (e) => {
                                     e.preventDefault();
                                     setShowLoader(true);
-                                    router.push(`/user/${props.session?.id}`)
+                                    router.push(`/user/profile`)
                                 }
                             }>
                                 <RiUserSettingsLine size={20} className='text-gray-700' />

@@ -60,29 +60,37 @@ export default function Nav() {
           </ul>
 
 
-          <div className="ml-auto flex items-center gap-3  justify-end relative">
+          <div className="ml-auto flex items-center gap-3  justify-end md:relative">
 
             <form action="" onSubmit={(e) => { e.preventDefault() }}>
-              <div className="rounded-[30px] py-1 px-4 text-sm flex items-center w-56 border border-gray-200">
-                <input className="w-5/6" type="search" placeholder="Search course" onChange={(e) => {
+              <div className="rounded-[30px] md:py-1 xs:py-0 md:px-4 xs:px-2 text-sm flex items-center md:w-56 border border-gray-200">
+                <input className="w-5/6 xs:hidden md:block" type="search" placeholder="Search course" onChange={(e) => {
                   setQuery(e.target.value);
                   setShowResult(true)
                   setTimeout(() => {
                     getCourses(e)
                   }, 1500)
                 }} />
-                <button type="submit" className="  text-center rounded-[10px] p-2"><BiSearch className="text-black m-auto text-lg text-center" /></button>
+                <button onClick={() => { if (query) { setQuery('') } else { setQuery('.') } }} type="submit" className="  text-center rounded-[10px] p-2"><BiSearch className="text-black m-auto text-lg text-center" /></button>
                 {
-                  (query.length !== 0) &&
-                  <div className="absolute top-16 left-0 bg-white shadow-[0_0_20px_0_rgb(0,0,0,0.1)] w-96 py-6  z-[999] rounded-lg">
+                  (query?.length !== 0) &&
+                  <div className="absolute md:top-16 xs:top-20 md:left-0 xs:left-1/2 -translate-x-1/2  bg-white shadow-[0_0_20px_0_rgb(0,0,0,0.1)] md:w-96 xs:w-11/12 py-6 z-[999] rounded-lg">
+                    <input className="w-5/6 xs:block md:hidden border border-gray-200 xs:mx-3 xs:px-2 xs:py-2 rounded-[25px] mb-2" type="search" placeholder="Search course" onChange={(e) => {
+                      setQuery(e.target.value);
+                      setShowResult(true)
+                      setTimeout(() => {
+                        getCourses(e)
+                      }, 1500)
+                    }} />
                     {
                       courses?.length !== 0 ? <>
 
                         {
                           courses?.map((data) => <div className="" key={data.id}>
-                            <div className="flex items-center gap-2 px-3 hover:bg-gray-50 duration-300">
+
+                            <div className="flex items-center gap-2 px-3 hover:bg-gray-50 duration-300 xs:py-3 md:py-2">
                               <Image src={data.featuredImage} width={200} height={200} alt="img" className="w-1/6 h-11 rounded-md object-cover" />
-                              <Link className="py-3 block w-5/6" href={'/courses/' + data.id} onClick={() => setShowLoader(true)}>{data.title.length > 50 ? data.title.slice(0, 50) + '...' : data.title}</Link>
+                              <Link className="py-3 block w-5/6 xs:text-xs md:text-sm" href={'/courses/' + data.id} onClick={() => setShowLoader(true)}>{data.title.length > 50 ? data.title.slice(0, 50) + '...' : data.title}</Link>
                             </div>
 
                           </div>)

@@ -23,7 +23,7 @@ function About() {
                 <div className="custom-container">
                     <div className="md:flex  items-center justify-center gap-5">
                         <div className="md:w-1/2">
-                            <p className="text-gray-500 mb-2 md:text-sm xs:text-sm">Learnhub was founded by John Nathan and Andrew Davies in 2021 with a vision of providing life-transforming learning experiences to learners around the world. Today,
+                            <p className="text-gray-500 mb-2 md:text-sm xs:text-sm">Learnhub was founded by Amanda Ahiwe in 2023 with a vision of providing life-transforming learning experiences to learners around the world. Today,
 
 
 

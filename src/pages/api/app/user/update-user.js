@@ -3,6 +3,7 @@ import { v2 as cloudinary } from "cloudinary";
 import streamifier from "streamifier";
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
+import prisma from "../../../../../prisma/db"
 const uploadMiddleware = upload.single("userPic");
 cloudinary.config({
     cloud_name: process.env.CLOUD_NAME,

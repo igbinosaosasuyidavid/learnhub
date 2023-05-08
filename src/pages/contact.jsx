@@ -28,7 +28,7 @@ function Contact() {
                     <h1 className="mb-5 font-semibold text-xl">Fill the form below</h1>
                     <div className="md:flex  items-center justify-center gap-5">
                         <div className="md:w-1/2">
-                            <form action="mailto:learnhub@gmail.com" method="post">
+                            <form action="mailto:amanda.ahiwe@gmail.com" method="post">
                                 <div className="mb-4">
                                     <label htmlFor="name" className="flex items-center gap-1 text-[14px] mb-1"><BiUser className="text-primary" /> Name</label>
                                     <input type="text" name="Name" placeholder="John Doe" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" />
@@ -53,7 +53,7 @@ function Contact() {
                             <div className="">
                                 <div className=" p-9 xs:pl-0 nd:pl-9  rounded-lg">
                                     <BiPhone className=" text-4xl " />
-                                    <span> Phone Numbeer</span>
+                                    <span> Phone Number</span>
 
                                     <h3 className="font-bold text-lg">044 813 1332</h3>
                                 </div>
@@ -67,7 +67,7 @@ function Contact() {
                                     <GiPositionMarker className="text-4xl" />
                                     <span>Address</span>
 
-                                    <h3 className="font-bold text-lg">	2 Redman Place, London E20 United Kingdom</h3>
+                                    <h3 className="font-bold text-lg">	2 Horton Road, Bradford BD7 United Kingdom</h3>
                                 </div>
                             </div>
 

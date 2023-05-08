@@ -36,8 +36,8 @@ function Contact() {
                     <h1 className="mb-5 font-semibold text-xl">Fill the form below</h1>
                     <div className="md:flex  items-center justify-center gap-5">
                         <div className="md:w-1/2">
-                        <form action={`mailto:amanda.ahiwe@gmail.com?subject=${name + "-" + subject}&body=${description}`} method="post" encType="text/plain">
-                            <div className="mb-4" target="_top">
+                        <form action={`mailto:amanda.ahiwe@gmail.com?subject=${name + "-" + subject}&body=${description}`} method="post" encType="text/plain" target="_top">
+                            <div className="mb-4" >
                                 <label htmlFor="name" className="flex items-center gap-1 text-[14px] mb-1"><BiUser className="text-primary" /> Name</label>
                                 <input type="text" name="Name" placeholder="John Doe" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" required onChange={(e) => { setName(e.target.value) }} autoComplete="on"/>
                             </div>

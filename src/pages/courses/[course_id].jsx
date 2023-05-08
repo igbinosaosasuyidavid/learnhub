@@ -77,6 +77,10 @@ function Course({ course, userIsStudent, wishlisted }) {
 
 
     const enrollUser = async () => {
+        if (!session?.user) {
+            setToast("Please sign in to access this course", "info");
+            return null
+        }
         if (session?.user?.admin) {
             setToast("Teachers cannot enroll courses", "info");
             return null
@@ -249,18 +253,25 @@ function Course({ course, userIsStudent, wishlisted }) {
                                             key={data.id}
                                             className="flex items-center p-4 px-5 rounded-md bg-[rgb(128,128,128,0.05)] hover:bg-[rgb(128,128,128,0.1)] duration-300 border border-solid border-gray-400 cursor-pointer mb-1"
                                             onClick={(e) => {
-                                                if (!userIsStudent) {
-                                                    if (session?.user) {
-                                                        setToast(
-                                                            "Please enroll into the course first ",
-                                                            "info"
-                                                        );
+                                                if (session?.user) {
+                                                    if (!userIsStudent) {
+                                                        if (session?.user) {
+                                                            setToast(
+                                                                "Please enroll into the course first to view lessons ",
+                                                                "info"
+                                                            );
+                                                        } else {
+                                                            router.push("/auth/login");
+                                                        }
                                                     } else {
-                                                        router.push("/auth/login");
+                                                        showLesson(data);
                                                     }
-                                                } else {
-                                                    showLesson(data);
+                                                }else{
+                                                    setToast(
+                                                        "Please sign in to access lessons"
+                                                    );
                                                 }
+                                               
                                             }}
                                         >
                                             <h1 className="xs:text-sm md:text-lg">{data.title}</h1>
@@ -280,7 +291,7 @@ function Course({ course, userIsStudent, wishlisted }) {
                             )}
                         </div>
                         <div className="md:w-2/6">
-                            {userIsStudent ? (
+                            {(userIsStudent && session?.user) ? (
                                 <div className="mt-4">
                                     <p className="md:text-2xl xs:text-sm">
                                         Howdy, {session?.user?.name}
@@ -312,7 +323,7 @@ function Course({ course, userIsStudent, wishlisted }) {
                                         <h4 className="font-semibold md:text-3xl xs:text-xl">
                                             {course.price !== 0 ? new Intl.NumberFormat("en-US", {
                                                 style: "currency",
-                                                currency: "USD",
+                                                currency: "GBP",
                                                 currencyDisplay: "narrowSymbol",
                                                 minimumFractionDigits: 0,
                                             }).format(parseFloat(course.price).toFixed(3)) : "Free"}

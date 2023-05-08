@@ -13,7 +13,7 @@ function About() {
                         <div className="w-full text-center">
                             <h2 className="text-white font-bold text-3xl">About Us</h2>
                             <div className="border-b border-gray-300 w-1/12 m-auto h-[1px] my-3"></div>
-                            <p className="text-gray-300 md:text-sm xs:text-xs">Learnhub was created for a purpose find out about us</p>
+                            <p className="text-gray-300 md:text-sm xs:text-xs">Learnhub was created for a purpose: find out about us!</p>
                         </div>
 
                     </div>

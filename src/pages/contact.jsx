@@ -1,10 +1,17 @@
 import Footer from "@/components/footer";
 import Nav from "@/components/nav";
+import { useSession } from "next-auth/react";
+import { useState } from "react";
 
 import { BiEnvelope, BiPhone, BiUser } from "react-icons/bi";
+import { BsPen } from "react-icons/bs";
 import { GiPositionMarker } from "react-icons/gi";
 
 function Contact() {
+    const [subject, setSubject] = useState('')
+    const {data:session} =useSession()
+    const [name, setName] = useState('')
+   
     return (
         <>
             <Nav />
@@ -16,7 +23,7 @@ function Contact() {
                         <div className="w-full text-center">
                             <h2 className="text-white font-bold text-3xl">Contact Us</h2>
                             <div className="border-b border-gray-300 w-1/12 m-auto h-[1px] my-3"></div>
-                            <p className="text-gray-300 md:text-sm xs:text-xs">Need help? get in touch with us</p>
+                            <p className="text-gray-300 md:text-sm xs:text-xs">Need help? Get in touch with us.</p>
                         </div>
 
                     </div>
@@ -28,19 +35,20 @@ function Contact() {
                     <h1 className="mb-5 font-semibold text-xl">Fill the form below</h1>
                     <div className="md:flex  items-center justify-center gap-5">
                         <div className="md:w-1/2">
-                            <form action="mailto:amanda.ahiwe@gmail.com" method="post">
-                                <div className="mb-4">
-                                    <label htmlFor="name" className="flex items-center gap-1 text-[14px] mb-1"><BiUser className="text-primary" /> Name</label>
-                                    <input type="text" name="Name" placeholder="John Doe" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" />
-                                </div>
-                                <div className="mb-4">
-                                    <label htmlFor="name" className="flex items-center gap-1 text-[14px] mb-1"><BiEnvelope className="text-primary" /> Email</label>
-                                    <input type="text" name="Name" placeholder="name@exmaple.com" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" />
-                                </div>
+
+                            <div className="mb-4">
+                                <label htmlFor="name" className="flex items-center gap-1 text-[14px] mb-1"><BiUser className="text-primary" /> Name</label>
+                                <input type="text" name="Name" placeholder="John Doe" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" required onChange={(e) => { setName(e.target.value) }} />
+                            </div>
+                            <div className="mb-4">
+                                <label htmlFor="name" className="flex items-center gap-1 text-[14px] mb-1"><BiEnvelope className="text-primary" /> Subject</label>
+                                <input type="text" name="Name" placeholder="Email Subject" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" required onChange={(e) => { setSubject(e.target.value) }} />
+                            </div>
+                            <form action={`mailto:amanda.ahiwe@gmail.com?subject=${name + "-" + subject}`} method="post" enctype="text/plain">
                                 <div className="mb-4">
 
-                                    <label htmlFor="name" className="flex items-center gap-1 mb-1 text-[14px]"><BiEnvelope className="text-primary " />Description</label>
-                                    <textarea rows={6} type="text" name="Name" placeholder="Please explain the issue that you are facinf" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" />
+                                    <label htmlFor="name" className="flex items-center gap-1 mb-1 text-[14px]"><BsPen className="text-primary " />Description</label>
+                                    <textarea rows={6} type="text" name="body" placeholder="Please explain the issue that you are facing" className="border border-gray-300 w-full py-3 px-3 rounded-lg text-sm" required />
                                 </div>
 
 

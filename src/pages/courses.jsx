@@ -11,7 +11,20 @@ import ToastContext from "@/contexts/toast";
 import CartContext from "@/contexts/cart";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
-export const getServerSideProps = async (context) => {
+import { authOptions } from "./api/auth/[...nextauth]";
+import { getServerSession } from "next-auth";
+export const getServerSideProps = async ({req,res}) => {
+    const session = await getServerSession(req, res, authOptions)
+
+    if (session?.user?.admin) {
+        res.setHeader("location", "/user/courses/"+session?.id);
+        res.statusCode = 302;
+        res.end();
+        return {
+            props: {}
+        };
+    }
+
     const categories = await prisma.category.findMany({
         where: {},
     })

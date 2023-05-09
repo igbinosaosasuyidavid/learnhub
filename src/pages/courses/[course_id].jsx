@@ -43,7 +43,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 
         wishlisted = wishlist?.id ? true : false;
     }
-
+    console.log(result);
     const courses = await prisma.course.findFirst({
         where: {
             AND: {
@@ -222,7 +222,7 @@ function Course({ course, userIsStudent, wishlisted }) {
                                     />
                                 ) : (
                                     <div className="flex justify-center items-center md:w-10 md:h-10 xs:w-8 xs:h-8 rounded-full  bg-gray-500 text-white font-semibold cursor-pointer uppercase md:text-xl xs:text-sm">
-                                        {course?.author?.fullName.match(/\b(\w)/g).join("")}
+                                        {course?.author?.fullName.match(/\b(\w)/g)?.join("")}
                                     </div>
                                 )}
                                 <h3 className="">

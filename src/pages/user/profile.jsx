@@ -227,7 +227,7 @@ export default function Profile(props) {
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Sort Code</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="sortCode" defaultValue={user?.sortCode} value={sort} placeholder="00-00-00" onChange={handleSort}/>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="sortCode" name="sortCode" defaultValue={user?.sortCode} value={sort} placeholder="00-00-00" onChange={handleSort}/>
                                 </div>
                               
                             </div>
@@ -238,7 +238,7 @@ export default function Profile(props) {
                                 </div>
                             <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Account Name</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="accountName" defaultValue={user?.accountName} placeholder="e.g John Ben Doe"/>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="accountName" name="accountName" defaultValue={user?.accountName} placeholder="e.g John Ben Doe"/>
                                 </div>
                             </div>
                         </div>

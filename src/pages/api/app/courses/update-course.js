@@ -132,6 +132,12 @@ export default async function handler(req, res) {
                 connect: JSON.parse(req.body.courseCats).map(data => ({ id: data }))
               }
             },
+            include: {
+              students: true,
+              lessons: true,
+              categories: true,
+              author: true,
+            }
           });
           return res.status(200).json({ course, success: true })
         })

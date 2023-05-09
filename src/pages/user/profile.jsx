@@ -46,7 +46,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 export default function Profile(props) {
     const [userImg, setUserImg] = useState()
     const [user,setUser]=useState()
-    const [sort,setSort]=useState('')
+    const [sort,setSort]=useState()
     const {setShowLoader} = useContext(LoaderContext)
     const {setToast} = useContext(ToastContext)
     const {data:session,update}=useSession()
@@ -54,7 +54,8 @@ export default function Profile(props) {
     useEffect(()=>{
         setShowLoader(false)
         setUser(props.user)
-    },[])
+        setSort(props.user.sortCode || '')
+    },[user])
     const handleProfileImageUpload = (e) => {
         const file = e.target.files[0]
         console.log(file);
@@ -116,8 +117,8 @@ export default function Profile(props) {
             formData.append("bio",bio.value)
             formData.append("sortCode",sortCode.value)
             formData.append("accountName",accountName.value)
-            formData.append("accountNumber",accountNo.value)
-            formData.append("bacnkName",bankName.value)
+            formData.append("accountNo",accountNo.value)
+            formData.append("bankName",bankName.value)
          
 
       
@@ -222,7 +223,7 @@ export default function Profile(props) {
                             <div className="md:w-1/2">
                                 <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Account Number</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="accountNo" defaultValue={user?.accountNo} minLength={8} maxLength={8}/>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="accountNo" name="accountNo" defaultValue={user?.accountNo} minLength={8} maxLength={8}/>
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Sort Code</label>
@@ -233,7 +234,7 @@ export default function Profile(props) {
                             <div className="md:w-1/2">
                             <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Bank Name</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="bankName" defaultValue={user?.bankName} placeholder="e.g Standard Chartered." />
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="bankName" name="bankName" defaultValue={user?.bankName} placeholder="e.g Standard Chartered." />
                                 </div>
                             <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Account Name</label>

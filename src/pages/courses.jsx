@@ -121,7 +121,7 @@ function Courses(props) {
                                                                     <p className="flex items-center sm:text-xs xs:text-[9px] gap-1 mb-3 mt-1"><FaUserTie className="text-secondary " />{data.author.fullName}</p>
 
                                                                     <h3 className="font-bold sm:text-lg xs:text-[13px] flex items-center pb-3 z-50">
-                                                                        <span>{data.price !== 0 ? new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(data.price).toFixed(3)) : "Free"}</span>
+                                                                        <span>{data.price !== 0 ? new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 2, }).format(parseFloat(data.price).toFixed(3)) : "Free"}</span>
                                                                         {data.price !== 0 ?
                                                                             <button className="flex items-center gap-1 border bg-secondary text-white hover:opacity-90 duration-300 sm:py-1 sm:px-2 xs:py-1 xs:px-1 text-[11px] rounded-md ml-auto" onClick={() => {
                                                                                 addToCart(data, (err) => {

@@ -84,7 +84,7 @@ function Wishlist() {
                           style: "currency",
                           currency: "GBP",
                           currencyDisplay: "narrowSymbol",
-                          minimumFractionDigits: 0,
+                          minimumFractionDigits: 2,
                         }).format(parseFloat(data.price).toFixed(3))}
                       </span>
                       <button

@@ -46,6 +46,7 @@ export const getServerSideProps = async ({ req, res, params }) => {
 export default function Profile(props) {
     const [userImg, setUserImg] = useState()
     const [user,setUser]=useState()
+    const [sort,setSort]=useState('')
     const {setShowLoader} = useContext(LoaderContext)
     const {setToast} = useContext(ToastContext)
     const {data:session,update}=useSession()
@@ -73,11 +74,34 @@ export default function Profile(props) {
         }
 
     }
-
+    const handleSort=(e)=>{
+        
+        e.preventDefault()
+        if (sort.length>e.target.value.length) {
+            if (e.target.value.length===3 || e.target.value.length==6) {
+                setSort(e.target.value.slice(0,e.target.value.length-1))
+            }else{
+                setSort(e.target.value)
+            }
+           
+        }else{
+            if (e.target.value.length<=8) {
+                if (e.target.value.length===2 || e.target.value.length==5) {
+                    setSort(e.target.value+"-")
+                }else{
+                    setSort(e.target.value)
+                }
+            }
+           
+           
+        }
+      
+    
+    }
     const updateUser = async (e) => {
         e.preventDefault();
      
-        const {fullName,email,bio}=e.target
+        const {fullName,email,bio,sortCode,accountName,accountNo,bankName}=e.target
 
         try {
             setShowLoader(true)
@@ -90,6 +114,10 @@ export default function Profile(props) {
             formData.append("id",session?.id)
             formData.append("email",email.value)
             formData.append("bio",bio.value)
+            formData.append("sortCode",sortCode.value)
+            formData.append("accountName",accountName.value)
+            formData.append("accountNumber",accountNo.value)
+            formData.append("bacnkName",bankName.value)
          
 
       
@@ -186,7 +214,37 @@ export default function Profile(props) {
                                 </div>
                             </div>
                         </div>
-
+                        {
+                            session?.user?.admin &&
+                            <>
+                              <h1 className="text-xl font-semibold mb-8 mt-9">Account info</h1>
+                                      <div className="md:flex gap-7">
+                            <div className="md:w-1/2">
+                                <div className="mb-4">
+                                    <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Account Number</label>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="accountNo" defaultValue={user?.accountNo} minLength={8} maxLength={8}/>
+                                </div>
+                                <div className="mb-4">
+                                    <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Sort Code</label>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="sortCode" defaultValue={user?.sortCode} value={sort} placeholder="00-00-00" onChange={handleSort}/>
+                                </div>
+                              
+                            </div>
+                            <div className="md:w-1/2">
+                            <div className="mb-4">
+                                    <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Bank Name</label>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="bankName" defaultValue={user?.bankName} placeholder="e.g Standard Chartered." />
+                                </div>
+                            <div className="mb-4">
+                                    <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Account Name</label>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="fullName" name="accountName" defaultValue={user?.accountName} placeholder="e.g John Ben Doe"/>
+                                </div>
+                            </div>
+                        </div>
+                            </>
+                          
+                        }
+                       
 
                     </form>
                 </div>

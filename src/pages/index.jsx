@@ -59,7 +59,7 @@ export default function Home() {
               <p className="text-gray-400 md:mt-2 xs:mt-4 md:text-sm xs:text-[12px] xs:w-3/4 xs:m-auto md:w-full md:m-0">Start or advance your career with our quality courses at the most affordable prices. We crush the barriers to your learning</p>
               <div className="mt-8">
                 {
-                  !session?.user?.admin ? <Link href={session?.user ? "/courses" : '/auth/register'} className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]" onClick={() => setShowLoader(true)}>{session?.user ? "Enroll a new course" : 'Join for Free'}</Link> : <Link className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]" href={"/user/courses/" + session?.id}>Create a course</Link>
+                  !session?.user?.admin ? <Link href={session?.user ? "/courses" : '/auth/register'} className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]" onClick={() => setShowLoader(true)}>{session?.user ? "Enroll a new course" : 'Join for Free'}</Link> : <Link className="rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px]" href={"/courses/create/"}>Create a course</Link>
                 }
 
 
@@ -115,7 +115,7 @@ export default function Home() {
                             <p className="flex items-center sm:text-xs xs:text-[9px] gap-1 mb-3 mt-1"><FaUserTie className="text-secondary " />{data.author.fullName}</p>
 
                             <h3 className="font-bold sm:text-lg xs:text-[13px] flex items-center pb-3 z-50">
-                              <span>{data.price !== 0 ? new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(data.price).toFixed(3)) : "Free"}</span>
+                              <span>{data.price !== 0 ? new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 2, }).format(parseFloat(data.price).toFixed(3)) : "Free"}</span>
                               {
                                 !session?.user?.admin && <>
                                    {data.price !== 0 ?
@@ -158,7 +158,7 @@ export default function Home() {
                 {
                   !loadCourse && <div className="flex w-full flex-col justify-center text-center">
                     <p className="text-center w-full">You dont have any course yet.</p>
-                    <Link className=" rounded-lg border border-secondary bg-secondary text-white py-2 px-5 hover:opacity-80 duration-300 font-semibold xs:text-[12px] md:text-[16px] w-60 m-auto inline-block mt-5" href={"/user/courses/" + session?.id}>Create a course</Link>
+             
 
                   </div>
                 }

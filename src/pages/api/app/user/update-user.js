@@ -53,6 +53,10 @@ export default async function handler(req, res) {
                         bio: req.body.bio,
                         email: req.body.email,
                         pic: result.secure_url,
+                        sortCode:req.body.sortCode,
+                        accountNo:req.body.accountNo,
+                        accountName:req.body.accountName,
+                        bankName:req.body.bankName,
                     },
                     include: {
                         orders: true,
@@ -79,6 +83,11 @@ export default async function handler(req, res) {
                 fullName: req.body.fullName,
                 bio: req.body.bio,
                 email: req.body.email,
+                sortCode:req.body.sortCode,
+                accountNo:req.body.accountNo,
+                accountName:req.body.accountName,
+                bankName:req.body.bankName,
+              
             },
             include: {
                 orders: true,

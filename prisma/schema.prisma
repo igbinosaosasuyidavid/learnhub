@@ -21,6 +21,10 @@ model User {
   updatedAt       DateTime   @updatedAt
   bio             String?
   pic             String?
+  sortCode        String?
+  accountNo       String?
+  bankName String?
+  accountName String?
   enrolledCourses Course[]   @relation("enrolledCourses", fields: [courseIds], references: [id])
   courseIds       String[]   @db.ObjectId
   createdCourses  Course[]

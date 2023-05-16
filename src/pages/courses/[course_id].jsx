@@ -312,8 +312,8 @@ function Course({ course, userIsStudent, wishlisted }) {
                                             Completed
                                         </p>
 
-                                        <button className="bg-primary text-[#ffffff] rounded-lg py-2 px-4 shadow-md mt-4 hover:opacity-90 duration-300 xs:text-xs md:text-sm">
-                                            Contine Learning
+                                        <button className="bg-primary text-[#ffffff] rounded-lg py-2 px-4 shadow-md mt-4 hover:opacity-90 duration-300 xs:text-xs md:text-sm cursor-pointer" onClick={()=>{  showLesson(course?.lessons[0]);}}>
+                                            Continue Learning
                                         </button>
                                     </div>
                                 </div>
@@ -339,14 +339,19 @@ function Course({ course, userIsStudent, wishlisted }) {
                                                 <button
                                                     className="bg-secondary text-white p-3 w-5/6 rounded-lg font-semibold mb-3 hover:opacity-90 duration-300 xs:text-xs md:text-sm"
                                                     onClick={() => {
-                                                        addToCart(course, (err) => {
-                                                            if (err) {
-                                                                setToast(`Already in your cart`, "info");
-                                                            } else {
-                                                                setToast(`Added to cart.`, "success");
-                                                                window.scrollTo(0, 0);
-                                                            }
-                                                        });
+                                                        if (session?.user?.admin) {
+                                                            setToast(`Teachers cannot add to cart`, "info");
+                                                        } else {
+                                                            addToCart(course, (err) => {
+                                                                if (err) {
+                                                                    setToast(`Already in your cart`, "info");
+                                                                } else {
+                                                                    setToast(`Added to cart.`, "success");
+                                                                    window.scrollTo(0, 0);
+                                                                }
+                                                            });
+                                                        }
+                                                     
                                                     }}
                                                 >
                                                     Add to Cart

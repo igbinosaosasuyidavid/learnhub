@@ -123,8 +123,8 @@ function Course({courses,categories,isAdmin}) {
             setShowLoader(true)
             const options = {
                 method: 'POST',
-                url: 'https://video.bunnycdn.com/library/117505/videos',
-                headers: {accept: 'application/json', 'content-type': 'application/*+json',AccessKey:'5b6c78c4-8b53-4ec7-9f3cb38760f3-090b-4ea1'},
+                url: 'https://video.bunnycdn.com/library/122582/videos',
+                headers: {accept: 'application/json', 'content-type': 'application/*+json',AccessKey:'0e3c1abe-28a4-43dd-934af83b4486-65b2-4ef6'},
                 data:{title:e.target.lesson_title.value}
           
               };
@@ -139,7 +139,7 @@ function Course({courses,categories,isAdmin}) {
   
               var expiration_time= new Date(new Date().getTime() + 5*60000).getTime();
               console.log(expiration_time);
-              var input=117505+'5b6c78c4-8b53-4ec7-9f3cb38760f3-090b-4ea1'+expiration_time+   localStorage.getItem('vid_id')
+              var input=122582+'0e3c1abe-28a4-43dd-934af83b4486-65b2-4ef6'+expiration_time+   localStorage.getItem('vid_id')
               const signature = async () => {
                 const textAsBuffer = new TextEncoder().encode(input);
                 const hashBuffer = await window.crypto.subtle.digest("SHA-256", textAsBuffer);
@@ -157,7 +157,7 @@ function Course({courses,categories,isAdmin}) {
                     AuthorizationSignature: await signature(), 
                     AuthorizationExpire: expiration_time, 
                     VideoId: localStorage.getItem('vid_id'), 
-                    LibraryId: 117505,
+                    LibraryId: 122582,
                 },
                 metadata: {
                     filetype: e.target.video.files[0].type,
@@ -187,7 +187,7 @@ function Course({courses,categories,isAdmin}) {
                         return ret;
                       }
 
-                    const resp=await axios.post("/api/app/lesson/create-lesson",{title:e.target.lesson_title.value,course_id:currentCourse.id,duration:fancyTimeFormat(duration),video_url:`https://iframe.mediadelivery.net/embed/117505/${localStorage.getItem("vid_id")}`})
+                    const resp=await axios.post("/api/app/lesson/create-lesson",{title:e.target.lesson_title.value,course_id:currentCourse.id,duration:fancyTimeFormat(duration),video_url:`https://iframe.mediadelivery.net/embed/122582/${localStorage.getItem("vid_id")}`})
                     if (resp.data.success) {
                         localStorage.removeItem("vid_id")
                         setShowLoader(false)

@@ -12,6 +12,7 @@ import LoaderContext from "@/contexts/loader";
 import { useSession } from "next-auth/react";
 import axios from "axios";
 import ToastContext from "@/contexts/toast";
+import { useRouter } from "next/router";
 export const getServerSideProps = async ({ req, res, params }) => {
     const session = await getServerSession(req, res, authOptions)
 
@@ -47,15 +48,20 @@ export default function Profile(props) {
     const [userImg, setUserImg] = useState()
     const [user,setUser]=useState()
     const [sort,setSort]=useState()
+    const [bank,setBank]=useState('')
+    const [accName,setAccName]=useState('')
+    const [accNo,setAccNo]=useState('')
     const {setShowLoader} = useContext(LoaderContext)
     const {setToast} = useContext(ToastContext)
     const {data:session,update}=useSession()
+    const [accountInfoRequired,setAccountInfoRequired]=useState(false)
+
 
     useEffect(()=>{
         setShowLoader(false)
         setUser(props.user)
         setSort(props.user.sortCode || '')
-    },[user])
+    },[])
     const handleProfileImageUpload = (e) => {
         const file = e.target.files[0]
         console.log(file);
@@ -78,6 +84,7 @@ export default function Profile(props) {
     const handleSort=(e)=>{
         
         e.preventDefault()
+        makeRequired()
         if (sort.length>e.target.value.length) {
             if (e.target.value.length===3 || e.target.value.length==6) {
                 setSort(e.target.value.slice(0,e.target.value.length-1))
@@ -99,11 +106,12 @@ export default function Profile(props) {
       
     
     }
+    
     const updateUser = async (e) => {
         e.preventDefault();
      
         const {fullName,email,bio,sortCode,accountName,accountNo,bankName}=e.target
-
+     
         try {
             setShowLoader(true)
             const formData=new FormData()
@@ -120,19 +128,21 @@ export default function Profile(props) {
             formData.append("accountNo",accountNo.value)
             formData.append("bankName",bankName.value)
          
-
+            
       
             const res= await axios.post(`/api/app/user/update-user`, formData)
             console.log(res.data);
             if (res.data.success) {
     
-               
+               console.log(res.data);
                 setUser(res.data.user)
+               
                 setShowLoader(false)
                 update({
                     pic:res.data.user.pic
                 })
                 setToast('Changes Saved','success')
+        
          
              
              
@@ -149,6 +159,13 @@ export default function Profile(props) {
             if (err.response) {
                 setToast(err.response.data.message,'error')
             }
+        }
+    }
+    const makeRequired=()=>{
+        if (bank.length===0 && sort?.length===0 && accName.length===0 && accNo.length===0) {
+            setAccountInfoRequired(false)
+        }else {
+            setAccountInfoRequired(true)
         }
     }
   
@@ -223,22 +240,32 @@ export default function Profile(props) {
                             <div className="md:w-1/2">
                                 <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Account Number</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="accountNo" name="accountNo" defaultValue={user?.accountNo} minLength={8} maxLength={8}/>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="accountNo" name="accountNo" defaultValue={user?.accountNo} minLength={8} maxLength={8} required={accountInfoRequired} onChange={(e)=>{
+                                       
+                                        setAccNo(e.target.value)
+                                        makeRequired()
+                                        }}/>
                                 </div>
                                 <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Sort Code</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="sortCode" name="sortCode" defaultValue={user?.sortCode} value={sort} placeholder="00-00-00" onChange={handleSort}/>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="sortCode" name="sortCode" defaultValue={user?.sortCode} value={sort} placeholder="00-00-00" onChange={handleSort} required={accountInfoRequired}/>
                                 </div>
                               
                             </div>
                             <div className="md:w-1/2">
                             <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Bank Name</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="bankName" name="bankName" defaultValue={user?.bankName} placeholder="e.g Standard Chartered." />
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="bankName" name="bankName" defaultValue={user?.bankName} placeholder="e.g Standard Chartered." required={accountInfoRequired} onChange={(e)=>{
+                                        setBank(e.target.value);
+                                        makeRequired()
+                                    }}/>
                                 </div>
                             <div className="mb-4">
                                     <label htmlFor="fullName" className="block text-gray-500 text-sm mb-2">Account Name</label>
-                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="accountName" name="accountName" defaultValue={user?.accountName} placeholder="e.g John Ben Doe"/>
+                                    <input className=" border border-secondary  bg-gray-100 px-4 py-3 w-full rounded-lg" type="text" id="accountName" name="accountName" defaultValue={user?.accountName} placeholder="e.g John Ben Doe" required={accountInfoRequired} onChange={(e)=>{
+                                        setAccName(e.target.value)
+                                        makeRequired()
+                                        }}/>
                                 </div>
                             </div>
                         </div>

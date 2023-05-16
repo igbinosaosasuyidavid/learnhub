@@ -109,7 +109,7 @@ export default function Create({ categories }) {
                     <div className=" w-full pt-8 pb-20 ">
                         <div className=" bg-white rounded-md p-6]">
                             <div className="">
-                                <form onSubmit={createCourse} method="POST" className="w-full">
+                                <form onSubmit={createCourse} method="POST" className="w-full" >
                                     <h2 className="text-black font-medium mb-3 md:text-2xl xs:text-lg">
                                         Create Course
                                     </h2>

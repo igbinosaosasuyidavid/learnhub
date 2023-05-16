@@ -81,7 +81,7 @@ export default function Profile() {
                                                             <div className="w-4/6">
                                                                 <p className='md:text-lg xs:text-[15px]  text-left '>{data.title}</p>
                                                                 <p className="flex items-center sm:text-sm xs:text-[12px] gap-1 mb-3 mt-1 text-gray-500">By {data.author.fullName} <BsDot color="black" size={20}/>{data.lessons?.length} lessons</p>
-                                                                <h3 className='text-black text-left md:text-[18px] xs:text-[17px] font-semibold mt-1.5 flex items-center'><span>{new Intl.NumberFormat("en-US", { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(data.price).toFixed(3))}</span><span className='text-xs text-red-400 cursor-pointer ml-auto' onClick={() => removeCart(data.id)}><FaTimes /></span></h3>
+                                                                <h3 className='text-black text-left md:text-[18px] xs:text-[17px] font-semibold mt-1.5 flex items-center'><span>{new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 2, }).format(parseFloat(data.price).toFixed(3))}</span><span className='text-xs text-red-400 cursor-pointer ml-auto' onClick={() => removeCart(data.id)}><FaTimes /></span></h3>
                                                             </div>
 
                                                         </div>
@@ -94,7 +94,7 @@ export default function Profile() {
                                     <div className="md:w-2/6 sticky top-1 self-start shadow-lg p-4">
                                         <div className='flex items-center pt-3'>
                                             <p className='mr-1 md:text-[20px] xs:text-[16px]'>Total : </p>
-                                            <p className='text-xl text-black font-bold md:text-2xl xs:text-[16px]'> {new Intl.NumberFormat("en-US", { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(cartTotal).toFixed(3))}</p>
+                                            <p className='text-xl text-black font-bold md:text-2xl xs:text-[16px]'> {new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 2, }).format(parseFloat(cartTotal).toFixed(3))}</p>
                                         </div>
                                         
                                         <span className="font-normal !text-sm ml-auto mb-6 inline-block">14 days refund policy</span>

@@ -151,7 +151,7 @@ export default function Dashboard() {
                             />
 
                             <h2 className="text-3xl font-semibold text-zinc-500">
-                                $
+                                £
                                 {courses.reduce((acc, cur) => {
                                     acc += cur.numOrders * cur.price;
                                     return acc;

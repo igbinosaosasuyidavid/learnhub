@@ -86,7 +86,7 @@ export default function MenuCart() {
                             <Image src={data.featuredImage} alt="" className='w-16 h-16 object-cover rounded-md' width={200} height={200} />
                             <div>
                               <p className='md:text-sm xs:text-[10px]  text-left'>{data.title.length > 40 ? data.title.slice(0, 40) + '...' : data.title}</p>
-                              <h3 className='text-black text-left md:text-[14px] xs:text-[12px] font-semibold mt-1.5 flex items-center'><span>{new Intl.NumberFormat("en-US", { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(data.price).toFixed(3))}</span><span className='text-xs text-red-400 cursor-pointer ml-auto' onClick={() => removeCart(data.id)}><FaTimes /></span></h3>
+                              <h3 className='text-black text-left md:text-[14px] xs:text-[12px] font-semibold mt-1.5 flex items-center'><span>{new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 2, }).format(parseFloat(data.price).toFixed(3))}</span><span className='text-xs text-red-400 cursor-pointer ml-auto' onClick={() => removeCart(data.id)}><FaTimes /></span></h3>
                             </div>
 
                           </div>
@@ -97,7 +97,7 @@ export default function MenuCart() {
                   }
                   <div className='flex items-center py-3'>
                     <p className='mr-1 md:text-[16px] xs:text-[13px]'>Total : </p>
-                    <p className='text-xl text-black font-bold md:text-xl xs:text-[15px]'> {new Intl.NumberFormat("en-US", { style: 'currency', currency: 'USD', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 0, }).format(parseFloat(cartTotal).toFixed(3))}</p>
+                    <p className='text-xl text-black font-bold md:text-xl xs:text-[15px]'> {new Intl.NumberFormat("en-US", { style: 'currency', currency: 'GBP', currencyDisplay: 'narrowSymbol', minimumFractionDigits: 2, }).format(parseFloat(cartTotal).toFixed(3))}</p>
                   </div>
                   <div className='flex justify-center items-center gap-3 mt-3'>
                     <button onClick={checkOut} className='checkout bg-primary hover:opacity-90 duration-300 text-white md:p-2  xs:p-1 md:px-4 xs:px-2 md:text-xs xs:text-[9px] rounded-md'> Checkout</button>

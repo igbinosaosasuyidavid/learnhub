@@ -62,7 +62,7 @@ function Courses(props) {
         <>
             <Nav />
 
-            <section className="bg-[url('/course.webp')]  pt-9 xs:px-6 xs:pb-9 md:pb-9 lg:px-0 overlay bg-center bg-cover bg-no-repeat h-64">
+            <section className="bg-[url('/course.webp')] pt-9 xs:px-6 xs:pb-9 md:pb-9 lg:px-0 overlay bg-center bg-cover bg-no-repeat h-64">
                 <div className="custom-container h-full">
                     <div className="flex justify-center items-center h-full">
                         <div>

@@ -8,38 +8,11 @@ import React, { useContext } from "react";
 import { FaLock, FaUser } from "react-icons/fa";
 
 function Login() {
-  const router = useRouter();
+
   const { data: session } = useSession();
   const { setShowLoader } = useContext(LoaderContext)
   const { setToast } = useContext(ToastContext)
-  const loginUser = async (event) => {
-    event.preventDefault();
 
-    try {
-      setShowLoader(true)
-      const form = event.target;
-      const result = await signIn("credentials", {
-        redirect: false,
-        email: form.email.value,
-        password: form.password.value,
-      });
-
-      if (result?.ok) {
-        router.push("/");
-        setShowLoader(false)
-      }
-      else {
-        setShowLoader(false)
-        setToast("Incorrect credentials", "error");
-      }
-    } catch (err) {
-      console.log(err);
-      if (err.response) {
-        setShowLoader(false)
-        setToast(err.response.data.message, 'error');
-      }
-    }
-  };
 
   if (session?.user) {
     router.push("/");
